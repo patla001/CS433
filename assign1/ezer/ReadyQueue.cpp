@@ -44,41 +44,6 @@ void ReadyQueue::dtraverse(Vertex *V)  // recursive post order traversal
   } // end of if statement
 } // end of dtraverse function
 
-//void ReadyQueue::add(PCB pcbPtr)
-//{
-
-//}
-
-
-// PURPOSE: Show vertices in IN order traversal from the Root
-void ReadyQueue::Display()
-{
-  cout << "----------------------------------------" << endl;
-  cout << "Elements in the IN order: " << endl;
-  INorderTraversal(Root);  // start in-order traversal from the root
-  cout << "----------------------------------------" << endl;
-}
-// PURPOSE: Does IN order traversal from V recursively
-// PARAM: V is te pointer to the vertex to visit right now
-// For non EC, the height and balance will always be 0
-void ReadyQueue::INorderTraversal(Vertex *V)
-{
-  if (V != NULL) // if current vertex is not null
-    {
-
-      INorderTraversal(V->Left); //  traverse left sub-tree of V recursively
-      //  display V's element, height and balance and do endl;
-      int elementV = V-> Elem.priority;
-      int heightV = V-> Height;
-      int balanceV = V-> Balance;
-
-
-      cout << elementV << "   Height: " << heightV << "   Balance: " << balanceV << endl;
-      //Display();
-      INorderTraversal(V->Right); //  traverse right sub-tree of V recursively
-  } // end of if statement
-} // end of INorderTraversal function
-
 
 void ReadyQueue::insertPCB(int pid, int priority)
 {
@@ -100,12 +65,12 @@ void ReadyQueue::add(elem_t E)
    N->Height = 0;
    N->Balance = 0;
    N->Up = NULL;      // no parent for now
-   cout << "Trying to insert " << E.priority << endl;
+  // cout << "Trying to insert " << E.priority << endl;
 
    if (Root == NULL)  // Special case: we have a brand new empty tree
      {
        Root = N;      // the new vertex is added as the root
-       cout << "...adding " << E.priority << " as the root" << endl;
+       //cout << "...adding " << E.priority << " as the root" << endl;
      }// end of the special case
 
    else  // the tree is not empty
@@ -119,12 +84,12 @@ void ReadyQueue::add(elem_t E)
 	while (V != NULL)
 	  {
 	    if (N->Elem.priority == V->Elem.priority) // the element already exists
-              {	 cout << "...error: the element already exists" << endl;
+              {	 //cout << "...error: the element already exists" << endl;
 		return;  }
 	    else
 
 	      if (N->Elem.priority < V->Elem.priority)  // what I have is smaller than V
-		{  cout << "...going to the left " << endl;
+		{  //cout << "...going to the left " << endl;
 
 
           Parent = V; // change Parent to be V to go down
@@ -134,7 +99,7 @@ void ReadyQueue::add(elem_t E)
 
 		}
 	      else // what I have is bigger than V
-		{  cout << "...going to the right " << endl;
+		{  //cout << "...going to the right " << endl;
 
           Parent = V; // change Parent to be V to go down
 
@@ -152,8 +117,8 @@ void ReadyQueue::add(elem_t E)
             Parent -> Left = N;
             // N should point UP to the Parent
             N-> Up = Parent;
-	        cout << "...adding " << E.priority << " as the left child of "
-		        << Parent->Elem.priority << endl;
+	        //cout << "...adding " << E.priority << " as the left child of "
+		    //    << Parent->Elem.priority << endl;
             // ** EC call here to adjust height and BF	}
             climbUp(N);
 
@@ -164,8 +129,8 @@ void ReadyQueue::add(elem_t E)
             Parent -> Right = N;
             // N should point UP to the Parent
             N -> Up = Parent;
-            cout << "...adding " << E.priority << " as the right child of "
-                  << Parent->Elem.priority << endl;
+            //cout << "...adding " << E.priority << " as the right child of "
+            //      << Parent->Elem.priority << endl;
 	        // ** EC call here to adjust height and BF
             climbUp(N);
 
@@ -180,14 +145,14 @@ void ReadyQueue::add(elem_t E)
 // ALGORITHM: First we must find the vertex then call Remove
 void ReadyQueue::deleteElem(elem_t E)
 {
-  cout << "Trying to delete " << E.priority << endl;
+  //cout << "Trying to delete " << E.priority << endl;
 
   Vertex *V;              // the current vertex
   Vertex *Parent = NULL;
 
   // case 1: Lonely Root
   if ((E.priority == Root->Elem.priority) && (Root->Left == NULL) && (Root->Right == NULL))
-    { cout << "...deleting the lonely root" << endl;
+    { //cout << "...deleting the lonely root" << endl;
       delete Root;
       Root = NULL;
       return; }  // only the Root was there and deleted it
@@ -220,20 +185,20 @@ void ReadyQueue::deleteElem(elem_t E)
   while (V != NULL)
   {
     if ( E.priority == V->Elem.priority || Root == NULL)   // found it
-	{  cout << "...removing " << V->Elem.priority << endl;
+	{  //cout << "...removing " << V->Elem.priority << endl;
       remove(V, Parent); // call remove here to remove V
 	  return;
     } // end of if statement
 
      else if (E.priority < V->Elem.priority)
-	 {  cout << "...going to the left" << endl;
+	 {  //cout << "...going to the left" << endl;
 	    // update Parent and V here to go down
 
         Parent = V; // update Parent
         V = V -> Left; //  V here to go down
 
 	 } else
-	  {  cout << "...going to the right" << endl;
+	  {  //cout << "...going to the right" << endl;
 
         Parent = V; // update Parent
         V = V -> Right; // V here to go down
@@ -243,7 +208,7 @@ void ReadyQueue::deleteElem(elem_t E)
     }// end of while
 
   // reached NULL  -- did not find it
-  cout << "Did not find the key in the tree." << endl;
+ // cout << "Did not find the key in the tree." << endl;
 
 }// end of DeleteVertex
 
@@ -258,7 +223,7 @@ void ReadyQueue::remove(Vertex *V, Vertex *P)
     if (V->Left == NULL && V->Right == NULL) //  if V is a leaf (case 1)
 
     {
-	cout << "removing a leaf" << endl;
+	//cout << "removing a leaf" << endl;
 
     if(V == P->Left) // if V is a left child of P
 	{
@@ -282,11 +247,11 @@ void ReadyQueue::remove(Vertex *V, Vertex *P)
    else  if (V-> Left == NULL)  // if V has just the right child so bypass V (case 2)
 	{
        if ( V == Root){
-           cout << "...deleting root and making right child the root" << endl;
+           //cout << "...deleting root and making right child the root" << endl;
            Root = Root -> Right;
            return;
        } else {
-           cout << "removing a vertex with just the right child" << endl;
+           //cout << "removing a vertex with just the right child" << endl;
            // You need if then else to determine Parent's left or right
 
            if (P-> Left == V) { //  and it has only the right subtree
@@ -309,11 +274,11 @@ void ReadyQueue::remove(Vertex *V, Vertex *P)
 	{
 
         if (V == Root) { // current vertex is same as root
-            cout << "...deleting root and making left child the root" << endl;
+            //cout << "...deleting root and making left child the root" << endl;
             Root = Root -> Left;
             return;
         } else {
-            cout << "removing a vertex with just the left child" << endl;
+            //cout << "removing a vertex with just the left child" << endl;
             //  You need if then else to determine Parent's left or right
             if (P-> Left == V) { //  and it has only the right subtree
                 P-> Left = V-> Left; //  should point to V's left child;
@@ -332,12 +297,12 @@ void ReadyQueue::remove(Vertex *V, Vertex *P)
         }//end of V with right child
 
    else // V has two children (case 3)
-	{ cout << "removing an internal vertex with children" << endl;
-	  cout << "..find the MAX of its left sub-tree" << endl;
+	{ //cout << "removing an internal vertex with children" << endl;
+	  //cout << "..find the MAX of its left sub-tree" << endl;
 	  elem_t Melem;
 	  // find MAX element in the left sub-tree of V
           Melem = findMax(V);
-          cout << "..replacing " << V->Elem.priority << " with " << Melem.priority << endl;
+          //cout << "..replacing " << V->Elem.priority << " with " << Melem.priority << endl;
           // Replace V's element with Melem here
           V->Elem = Melem;
         }//end of V with two children
@@ -360,7 +325,7 @@ elem_t ReadyQueue::findMax(Vertex *V)
     }   // end of if statement
   // reached NULL Right  -- V now has the MAX element
   elem_t X = V->Elem;
-  cout << "...Max is " << X.priority <<  " and we need to delete it" << endl;
+  //cout << "...Max is " << X.priority <<  " and we need to delete it" << endl;
   remove(V, Parent);    // remove the MAX vertex
   return X;             // return the MAX element
 
@@ -393,7 +358,7 @@ int ReadyQueue::height(Vertex *V)
 void ReadyQueue::climbUp(Vertex *V)
 {
 
-    cout << "...Start climbing up to adjust heights ......" << endl;
+    //cout << "...Start climbing up to adjust heights ......" << endl;
     while (V != NULL)
     {
 
@@ -404,9 +369,9 @@ void ReadyQueue::climbUp(Vertex *V)
 
       V -> Balance = height(V-> Right) - height(V -> Left);
      //V -> Balance = height(V->Left) - height(V->Right);
-      cout << "..." << V->Elem.priority << "'s height: "
-           << V->Height << " with balance: "
-       	   << V->Balance << endl;
+    //  cout << "..." << V->Elem.priority << "'s height: "
+    //       << V->Height << " with balance: "
+    //  	   << V->Balance << endl;
       // calling fixIt function to balance the tree.
       fixIt(V);
 
@@ -424,7 +389,7 @@ void ReadyQueue::climbUp(Vertex *V)
 // Parameter: Vertex Parent refers as the parent node.
 void ReadyQueue::singleLeftRotate(Vertex *Parent)
 {   // Display the rotation case.
-    cout << "    case 1: right heavy so rotate to left" << endl;
+    //cout << "    case 1: right heavy so rotate to left" << endl;
 
     // Rotation
     Vertex *Pivot = Parent -> Right;
@@ -459,9 +424,9 @@ void ReadyQueue::singleLeftRotate(Vertex *Parent)
     Pivot -> Balance = height(Pivot->Right) - height(Pivot-> Left);
 
     // Display the Update rotation
-    cout << " -- rotate left with pivot " << Pivot -> Elem.priority << endl;
-    cout << "   New root is: " << Pivot -> Elem.priority << endl;
-    cout << ">>>>Fixed" << endl;
+    //cout << " -- rotate left with pivot " << Pivot -> Elem.priority << endl;
+    //cout << "   New root is: " << Pivot -> Elem.priority << endl;
+    //cout << ">>>>Fixed" << endl;
 
 
 } // end of singleLeftRotate function.
@@ -470,7 +435,7 @@ void ReadyQueue::singleLeftRotate(Vertex *Parent)
 // Parameter: Vertex Parent refers to the node parent.
 void ReadyQueue::singleRightRotate(Vertex *Parent)
 {   // Display the rotation case.
-    cout << "    case 2: left heavy so rotate to right" << endl;
+    //cout << "    case 2: left heavy so rotate to right" << endl;
 
     // Rotating
     Vertex *Pivot = Parent -> Left;
@@ -504,9 +469,9 @@ void ReadyQueue::singleRightRotate(Vertex *Parent)
     Pivot->Balance = height(Pivot->Right) - height(Pivot->Left);
 
     // Display the update rotation
-    cout << " -- rotate right with pivot " << Pivot -> Elem.priority << endl;
-    cout << "   New root is: " << Pivot -> Elem.priority << endl;
-    cout << ">>>>Fixed" << endl;
+    //cout << " -- rotate right with pivot " << Pivot -> Elem.priority << endl;
+    //cout << "   New root is: " << Pivot -> Elem.priority << endl;
+    //cout << ">>>>Fixed" << endl;
 
 } // end of singleRightRotate function
 
@@ -514,7 +479,7 @@ void ReadyQueue::singleRightRotate(Vertex *Parent)
 // Parameter: Vertex V refers as the parent node.
 void ReadyQueue::doubleLeftRotate(Vertex *V)
 {   // Display the rotation case.
-    cout << "    case 3: right heavy with left heavy sub-tree" << endl;
+    //cout << "    case 3: right heavy with left heavy sub-tree" << endl;
     singleRightRotate(V -> Right); // calling singleRightRotate function.
     singleLeftRotate(V); // calling singleLeftRotate function
 
@@ -525,7 +490,7 @@ void ReadyQueue::doubleLeftRotate(Vertex *V)
 // Parameter: Vertex V refers as the parent node.
 void ReadyQueue::doubleRightRotate(Vertex *V)
 {   // Display the rotation case.
-    cout << "    case 4: left heavy with right heavy sub-tree" << endl;
+    //cout << "    case 4: left heavy with right heavy sub-tree" << endl;
     singleLeftRotate(V -> Left); // calling singleLeftRotate function.
     singleRightRotate(V); // calling singleRightRotate function
 
@@ -541,16 +506,16 @@ void ReadyQueue::printTree(Vertex *V, string indent, bool last)
 
     // print the tree structure on the screen
     if (V != NULL) {
-        cout << indent;
-        if (last) {
-            cout << "R----";
-            indent += "     ";
-        } else {
-            cout <<"L----";
-            indent += "|    ";
-        } // end of if statement
+        //cout << indent;
+        //if (last) {
+        //    cout << "R----";
+        //    indent += "     ";
+        //} else {
+        //    cout <<"L----";
+        //    indent += "|    ";
+        //} // end of if statement
         // display the values of the node
-        cout << V->Elem.priority <<" BF = "<< V -> Balance<<")"<<endl;
+        //cout << V->Elem.priority <<" BF = "<< V -> Balance<<")"<<endl;
 
         printTree(V->Left,indent,false); // calling printTree for the left node
         printTree(V->Right,indent,true); // calling printTree for the right node
@@ -571,55 +536,55 @@ void ReadyQueue::fixIt(Vertex *V)
 {
     if (V-> Balance > 1)
     {   // display balance factor and element
-        cout << ">>>>Balance Factor " << V-> Balance << endl;
-        cout << ">>>>Fixing an unbalanced node at " << V-> Elem.priority << endl;
+        //cout << ">>>>Balance Factor " << V-> Balance << endl;
+        //cout << ">>>>Fixing an unbalanced node at " << V-> Elem.priority << endl;
 
         if (V-> Right -> Balance > 0)
         {
             // display balance factor right node
-            cout << "SLR-Parent-Right: " << V-> Right -> Balance << endl;
+            //cout << "SLR-Parent-Right: " << V-> Right -> Balance << endl;
 
             // case 1: right right case
             singleLeftRotate(V);
 
-            Display(); // display the table tree
-            showTree(); // display the map tree
+            //Display(); // display the table tree
+            //showTree(); // display the map tree
 
         } else if (V-> Right -> Balance < 0 ){
             // display the balance factor right node
-            cout << "DLR-Parent-Right: " << V-> Right -> Balance << endl;
+            //cout << "DLR-Parent-Right: " << V-> Right -> Balance << endl;
             // case 3: right left case
             doubleLeftRotate(V);
 
-            Display(); // display the table tree
-            showTree(); // display the map tree
+            //Display(); // display the table tree
+            //showTree(); // display the map tree
         }
     }
 
     if (V-> Balance < -1  )
     {   // display balance factor and element
-        cout << ">>>>Balance Factor " << V-> Balance << endl;
-        cout << ">>>>Fixing an unbalanced node at " << V-> Elem.priority << endl;
+        //cout << ">>>>Balance Factor " << V-> Balance << endl;
+        //cout << ">>>>Fixing an unbalanced node at " << V-> Elem.priority << endl;
 
 
          if ( V -> Left -> Balance < 0)
          {
              // display the balance factor left node.
-             cout << "SRR-Parent-Left: " << V-> Left -> Balance << endl;
+             //cout << "SRR-Parent-Left: " << V-> Left -> Balance << endl;
              // case 2: left left cases
             singleRightRotate(V);
 
-            Display(); // display the table tree
-            showTree(); // display the map tree
+            //Display(); // display the table tree
+            //showTree(); // display the map tree
 
          } else if (V-> Left -> Balance > 0 ) {
              // display the balance factor left node.
-             cout << "DRR-Parent-Left: " << V-> Left -> Balance << endl;
+             //cout << "DRR-Parent-Left: " << V-> Left -> Balance << endl;
              // case 4: left right case
             doubleRightRotate(V);
 
-             Display(); // display the table tree
-             showTree(); // display the map tree
+             //Display(); // display the table tree
+             //showTree(); // display the map tree
          } // end of if statement.
     } // end of if statement.
 
@@ -653,7 +618,7 @@ void ReadyQueue::findMaxNode(Vertex *V)
   // reached NULL Right  -- V now has the MAX element
   //elem_t X = V->Elem;
   //cout << "...Max is " << X.priority <<  " and we need to delete it" << endl;
-  cout << "Parent: " << Parent->Elem.priority << endl;
+  //cout << "Parent: " << Parent->Elem.priority << endl;
   remove(V, Parent);
   //return V->Elem;             // return the MAX element
 
@@ -688,7 +653,18 @@ void ReadyQueue::displayElements(Vertex *V)
       //int heightV = V-> Height;
       //int balanceV = V-> Balance;
 
-      cout << "Proc ID = " << idV << ", priority = " << priorityV << endl;
+      cout << "Proc ID = " << idV << ", State = ";
+
+          switch (V->Elem.state)
+          {
+              case ProcState::NEW : std::cout << "New"; break;
+              case ProcState::READY : std::cout << "Ready"; break;
+              case ProcState::RUNNING : std::cout << "Running"; break;
+              case ProcState::WAITING : std::cout << "Waiting"; break;
+              case ProcState::TERMINATED : std::cout << "Terminated"; break;
+          }
+
+       cout << ", priority = " << priorityV << endl;
       //cout << elementV << "   Height: " << heightV << "   Balance: " << balanceV << endl;
       //Display();
       displayElements(V->Left); //  traverse left sub-tree of V recursively

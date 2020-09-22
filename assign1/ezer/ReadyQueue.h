@@ -52,8 +52,7 @@ public:
     void insertPCB(int, int);
 
 	void dtraverse(Vertex *V);
-	void Display();
-	void INorderTraversal(Vertex *V);
+	
     void displayElements(Vertex *V);
     void findMaxNode(Vertex *V);
     void findMaximum();
