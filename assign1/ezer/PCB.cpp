@@ -71,20 +71,46 @@ PCBTable::PCBTable()
 
 
 
-//void PCBTable::MakeTable()
-//{
+void PCBTable::MakeTable(int size)
+{
     // string state = "Ready";
 	// for (int pid = 0; pid < 30; pid++){
 	//  	table.add(PCB(pid,state,pid));
     //     //table.push_back(PCB(pid,state,pid));
  	// }
-    //return table;
-    //for (int pid = 0; pid < MAX_SIZE; pid++){
-    //     table.push_back(PCB(pid,ProcState::NEW,0));
- 	//}
+    // return table;
+    for (int pid = 0; pid < size; pid++){
+        //table.push_back(PCB(pid,ProcState::NEW,pid));
+        PCB newPCB = PCB(pid+1,ProcState::NEW,pid+1);
+        table[pid] = newPCB;
+ 	}
 
 
-//}
+}
+
+void PCBTable::displayPCBTable()
+{
+    cout <<  "--------------------------------------------------" << endl;
+    cout <<  "------------------PCB Table-----------------------" << endl;
+    cout <<  "--------------------------------------------------" << endl;
+    cout <<  "Proc ID " << "\t" << "State" << "\t\t" << "Priority" << endl;
+    cout <<  "--------------------------------------------------" << endl;
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        cout << table[i].id << "\t\t";
+        switch (table[i].state)
+        {
+            case ProcState::NEW : std::cout << "New"; break;
+            case ProcState::READY : std::cout << "Ready"; break;
+            case ProcState::RUNNING : std::cout << "Running"; break;
+            case ProcState::WAITING : std::cout << "Waiting"; break;
+            case ProcState::TERMINATED : std::cout << "Terminated"; break;
+        }
+
+        cout << "\t\t" << table[i].priority << endl;
+
+    } // end of for-loop
+} // end of displayPCBTable function.
 
 // PCBTable::PCBTable()
 // {

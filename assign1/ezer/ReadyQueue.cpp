@@ -45,13 +45,20 @@ void ReadyQueue::dtraverse(Vertex *V)  // recursive post order traversal
 } // end of dtraverse function
 
 
-void ReadyQueue::insertPCB(int pid, int priority)
+PCB ReadyQueue::insertPCB(int pid, int priority)
 {
     PCB pcbPtr;
     pcbPtr.id = pid;
     pcbPtr.state = ProcState::READY;
     pcbPtr.priority = priority;
+    // add's object into the queue
     add(pcbPtr);
+    // updates the parameters into the PCB Table
+    //table.at(pid) = pcbPtr;
+    //table[pid] = pcbPtr;
+    count++;
+    //cout << "counting: " << count << endl;
+    return pcbPtr;
 }
 
 void ReadyQueue::add(elem_t E)
@@ -603,7 +610,7 @@ void ReadyQueue::addArrayList(PCB pcbPtr, int index, int priority)
     count++;
 }
 
-void ReadyQueue::findMaxNode(Vertex *V)
+PCB ReadyQueue::findMaxNode(Vertex *V)
 {
     Vertex *Parent = V;
     //V = V->Left;          // start with the left child of V
@@ -619,15 +626,25 @@ void ReadyQueue::findMaxNode(Vertex *V)
   //elem_t X = V->Elem;
   //cout << "...Max is " << X.priority <<  " and we need to delete it" << endl;
   //cout << "Parent: " << Parent->Elem.priority << endl;
+
+  PCB pcbPtr;
+  pcbPtr.id = V->Elem.id;
+  pcbPtr.state = ProcState::RUNNING;
+  pcbPtr.priority = V->Elem.priority;
+  //table.at(pcbPtr.id) = pcbPtr;
+  table[pcbPtr.id] = pcbPtr;
   remove(V, Parent);
   //return V->Elem;             // return the MAX element
-
+  return pcbPtr;
 }// end of FindMax function
 
-void ReadyQueue::findMaximum()
+PCB ReadyQueue::findMaximum()
 {
-    findMaxNode(Root);
-    //return maxNode;
+    PCB pcbPtr;
+    pcbPtr = findMaxNode(Root);
+    count--;
+    //cout << "counting: " << count << endl;
+    return pcbPtr;
 }
 
 
@@ -676,28 +693,7 @@ void ReadyQueue::displayElements(Vertex *V)
 
 void ReadyQueue::displayQueue()
 {
-    // std::cout << "PID" << "   " << "ProcState" << "   " << "Priority" << std::endl;
-    // //std::cout << "PID" << "   " << "Priority" << std::endl;
-    // for (unsigned int j = 0; j < MAX_SIZE; j++) {
-    //     std::cout << table[j].id << "\t";
-    //
-    //     switch (table[j].state)
-    //     {
-    //         case ProcState::NEW : std::cout << "New"; break;
-    //         case ProcState::READY : std::cout << "Ready"; break;
-    //         case ProcState::RUNNING : std::cout << "Running"; break;
-    //         case ProcState::WAITING : std::cout << "Waiting"; break;
-    //         case ProcState::TERMINATED : std::cout << "Terminated"; break;
-    //     }
-    //
-    //     cout << "\t\t" << table[j].priority << std::endl;
-    //
-    //
-    //
-    //
-    //
-    //     //std::cout << table[j].id << "\t" << table[j].state << "\t\t" << table[j].priority << std::endl;
-    // }
+
     cout << "Display Processes in ReadyQueue:" << endl;
     displayElements(Root);  // start in-order traversal from the root
 

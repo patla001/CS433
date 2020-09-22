@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+//#include "ReadyQueue.h"
 
 using namespace std;
 // Remember to add comments to your code
@@ -24,7 +25,7 @@ Process control block(PCB) is a data structure representing a process in the sys
 A process should have at least an ID and a state(i.e.NEW, READY, RUNNING, WAITING or TERMINATED).
 It may also have other attributes, such as scheduling information (e.g. priority)
 */
-class PCB  {
+class PCB   {
 //private:
 //	int key; // key is defined as the ID number and the counter.
 //	string state; // state name: New, Ready, Running, Waiting, and Terminated
@@ -56,15 +57,16 @@ class PCBTable
 {
 private:
 	//std::vector<PCB> table;
-	PCB table[MAX_SIZE];
+	//PCB table[MAX_SIZE];
 
 public:
-
+	PCB table[MAX_SIZE];
 	PCBTable();
 	//bool isEmpty();
 	//bool isFull();
 	//void add(PCB pcbPtr);
-	//void MakeTable();
+	void MakeTable(int);
+	void displayPCBTable();
 	friend class ReadyQueue;
 };
 

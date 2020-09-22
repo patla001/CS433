@@ -49,13 +49,13 @@ public:
 
 	void addArrayList(elem_t pcbPtr, int, int);
 
-    void insertPCB(int, int);
+    PCB insertPCB(int, int);
 
 	void dtraverse(Vertex *V);
-	
+
     void displayElements(Vertex *V);
-    void findMaxNode(Vertex *V);
-    void findMaximum();
+    PCB findMaxNode(Vertex *V);
+    PCB findMaximum();
 	void add(PCB E);
 	void deleteElem(elem_t E);
 	void remove(Vertex *V, Vertex *P);
