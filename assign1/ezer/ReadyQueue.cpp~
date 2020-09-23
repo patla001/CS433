@@ -164,7 +164,7 @@ void ReadyQueue::deleteElem(elem_t E)
       Root = NULL;
       return; }  // only the Root was there and deleted it
 
-/*
+
   // Case 2: One Substree root
   if (Root == NULL) { // if what you want to delete is the root
       if( V-> Right == NULL) { //  and it has only the left subtree
@@ -183,7 +183,7 @@ void ReadyQueue::deleteElem(elem_t E)
           }
       }
   }// end of deleting the root with one subtree
-*/
+
   // Otherwise deleting something else
 
   V = Root;  // start with the root to look for E
