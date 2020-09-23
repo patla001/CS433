@@ -61,11 +61,14 @@ private:
 
 public:
 	PCB table[MAX_SIZE];
+	int countTable;
 	PCBTable();
+	~PCBTable();
 	//bool isEmpty();
 	//bool isFull();
 	//void add(PCB pcbPtr);
 	void MakeTable(int);
+	void MakeTableRandom(int size);
 	void displayPCBTable();
 	friend class ReadyQueue;
 };

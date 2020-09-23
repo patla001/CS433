@@ -29,6 +29,7 @@ ReadyQueue::~ReadyQueue()
 {
     dtraverse(Root); // traverse to delete all vertices in post order
     Root = NULL;
+    //cout << "queue is Empty" << endl;
 }
 
 
@@ -86,7 +87,7 @@ void ReadyQueue::add(elem_t E)
         Vertex *Parent;  // Parent will point to V's parent
 
         V = Root;        // start with the root as V
-
+        Parent = NULL;
 	// go down the tree until you cannot go any further
 	while (V != NULL)
 	  {
@@ -164,9 +165,9 @@ void ReadyQueue::deleteElem(elem_t E)
       Root = NULL;
       return; }  // only the Root was there and deleted it
 
-/*
+
   // Case 2: One Substree root
-  if (Root == NULL) { // if what you want to delete is the root
+/*  if (Root == NULL) { // if what you want to delete is the root
       if( V-> Right == NULL) { //  and it has only the left subtree
           if ( V  == Root ) {
               Root = Root -> Left;

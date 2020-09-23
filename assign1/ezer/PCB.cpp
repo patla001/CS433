@@ -1,6 +1,8 @@
 #include "PCB.h"
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <random>
 using namespace std;
 // TODO: Add your implementation here
 
@@ -29,7 +31,7 @@ PCBTable::PCBTable()
 {
     //front = 0; // indicate an empty front queue
     //rear = -1; // indicate an empty rear queue
-    //count = 0; // indicate an empty count queue
+    countTable = 0; // indicate an empty count queue
     //string state = "";
 	//for (int pid = 0; pid < MAX_SIZE; pid++){
     //      table.push_back(PCB(pid,ProcState::NEW,0));
@@ -37,6 +39,22 @@ PCBTable::PCBTable()
 
 
 } // end of PCBTable constructor.
+
+PCBTable::~PCBTable()
+{
+    //delete[] table;
+    //PCB table[MAX_SIZE];
+    // int sizeTemp = countTable;
+    // for (int pid = 0; pid < sizeTemp; pid++){
+    //     delete table[pid];
+    //     countTable--;
+ 	// }
+    //
+    // if (countTable == 0)
+    // {
+    //     cout << "PCB Table Empty" << endl;
+    // }
+}
 
 
 // void PCBTable::add(PCB pcbPtr)
@@ -73,16 +91,34 @@ PCBTable::PCBTable()
 
 void PCBTable::MakeTable(int size)
 {
-    // string state = "Ready";
-	// for (int pid = 0; pid < 30; pid++){
-	//  	table.add(PCB(pid,state,pid));
-    //     //table.push_back(PCB(pid,state,pid));
- 	// }
-    // return table;
+
     for (int pid = 0; pid < size; pid++){
         //table.push_back(PCB(pid,ProcState::NEW,pid));
         PCB newPCB = PCB(pid+1,ProcState::NEW,pid+1);
         table[pid] = newPCB;
+        countTable++;
+ 	}
+
+
+}
+
+
+void PCBTable::MakeTableRandom(int size)
+{
+
+    std::random_device rd;
+	std::mt19937 mt_rand(rd());
+
+
+    for (int pid = 0; pid < size; pid++){
+        //table.push_back(PCB(pid,ProcState::NEW,pid));
+
+
+        PCB newPCB = PCB(pid+1,ProcState::NEW,mt_rand() % 50);
+        table[pid] = newPCB;
+        countTable++;
+
+
  	}
 
 
