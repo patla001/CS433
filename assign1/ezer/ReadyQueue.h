@@ -41,21 +41,28 @@ public:
 	//const int TSIZE = 30;
 	//PCBTable();
 
-	PCB queueTable[MAX_SIZE];
-	ReadyQueue();
+	//PCB queueTable[MAX_SIZE];
+    std::vector<PCB> queueTable;
+    ReadyQueue();
 	~ReadyQueue();
 	//int hash(int); // hash function
 	// add a PCB representing a process into the ready queue.
 
-	void addArrayList(elem_t pcbPtr, int, int);
+	//void addArrayList(elem_t pcbPtr, int, int);
 
     PCB insertPCB(int, int);
 
 	void dtraverse(Vertex *V);
 
     void displayElements(Vertex *V);
+    void exportElements(Vertex *V);
+    void exportPCB();
     PCB findMaxNode(Vertex *V);
     PCB findMaximum();
+    int rootSize();
+    int sizeV(Vertex* V);
+    PCB findPriority(Vertex *V);
+    PCB maxPriority();
 	void add(PCB E);
 	void deleteElem(elem_t E);
 	void remove(Vertex *V, Vertex *P);

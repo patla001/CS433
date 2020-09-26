@@ -53,12 +53,13 @@ PCB ReadyQueue::insertPCB(int pid, int priority)
     pcbPtr.state = ProcState::READY;
     pcbPtr.priority = priority;
     // add's object into the queue
+    //PCB sortPCBPtr;
     add(pcbPtr);
     // updates the parameters into the PCB Table
     //table.at(pid) = pcbPtr;
-    //table[pid] = pcbPtr;
+    //###table[pid-1] = pcbPtr;
     count++;
-    //cout << "counting: " << count << endl;
+    cout << "counting +: " << count << endl;
     return pcbPtr;
 }
 
@@ -155,7 +156,7 @@ void ReadyQueue::deleteElem(elem_t E)
 {
   //cout << "Trying to delete " << E.priority << endl;
 
-  Vertex *V;              // the current vertex
+  Vertex *V = NULL;              // the current vertex
   Vertex *Parent = NULL;
 
   // case 1: Lonely Root
@@ -167,7 +168,7 @@ void ReadyQueue::deleteElem(elem_t E)
 
 
   // Case 2: One Substree root
-/*  if (Root == NULL) { // if what you want to delete is the root
+  if (Root == NULL) { // if what you want to delete is the root
       if( V-> Right == NULL) { //  and it has only the left subtree
           if ( V  == Root ) {
               Root = Root -> Left;
@@ -184,7 +185,7 @@ void ReadyQueue::deleteElem(elem_t E)
           }
       }
   }// end of deleting the root with one subtree
-*/
+
   // Otherwise deleting something else
 
   V = Root;  // start with the root to look for E
@@ -375,7 +376,7 @@ void ReadyQueue::climbUp(Vertex *V)
       V -> Height = height(V);
       // compute V->Balance based on the left/right children
 
-      V -> Balance = height(V-> Right) - height(V -> Left);
+     V -> Balance = height(V-> Right) - height(V -> Left);
      //V -> Balance = height(V->Left) - height(V->Right);
     //  cout << "..." << V->Elem.priority << "'s height: "
     //       << V->Height << " with balance: "
@@ -599,17 +600,45 @@ void ReadyQueue::fixIt(Vertex *V)
 } // end of fixIt function.
 
 
-void ReadyQueue::addArrayList(PCB pcbPtr, int index, int priority)
+// void ReadyQueue::addArrayList(PCB pcbPtr, int index, int priority)
+// {
+//     //rear=(rear+1) % MAX_SIZE; table[rear]=pcbPtr; count++;
+//     //table.push_back(pcbPtr);
+//     pcbPtr.id=index;
+//     pcbPtr.state=ProcState::NEW;
+//     pcbPtr.priority=priority;
+//     //table.at(index)=pcbPtr;
+//     //table[index-1]=pcbPtr;
+//     count++;
+// }
+
+PCB ReadyQueue::findPriority(Vertex *V)
 {
-    //rear=(rear+1) % MAX_SIZE; table[rear]=pcbPtr; count++;
-    //table.push_back(pcbPtr);
-    pcbPtr.id=index;
-    pcbPtr.state=ProcState::NEW;
-    pcbPtr.priority=priority;
-    //table.at(index)=pcbPtr;
-    table[index-1]=pcbPtr;
-    count++;
-}
+    //Vertex *Parent = NULL;
+    //Vertex *Parent = V;
+    //V = V->Left;          // start with the left child of V
+    if(V != NULL) {
+          // while the right child of V is still available
+        while (V-> Right != NULL)
+        {
+            //Parent = V; // update Parent
+            V = V-> Right; // V to go to the right
+        } // end of while loop
+    }   // end of if statement
+
+
+  PCB pcbPtr;
+  pcbPtr.id = V->Elem.id;
+  pcbPtr.state = ProcState::RUNNING;
+  pcbPtr.priority = V->Elem.priority;
+  //table.at(pcbPtr.id) = pcbPtr;
+  //###table[pcbPtr.id-1] = pcbPtr;
+
+
+  return pcbPtr;
+}// end of FindMax function
+
+
 
 PCB ReadyQueue::findMaxNode(Vertex *V)
 {
@@ -633,7 +662,8 @@ PCB ReadyQueue::findMaxNode(Vertex *V)
   pcbPtr.state = ProcState::RUNNING;
   pcbPtr.priority = V->Elem.priority;
   //table.at(pcbPtr.id) = pcbPtr;
-  table[pcbPtr.id] = pcbPtr;
+  //###table[pcbPtr.id-1] = pcbPtr;
+
   remove(V, Parent);
   //return V->Elem;             // return the MAX element
   return pcbPtr;
@@ -644,7 +674,15 @@ PCB ReadyQueue::findMaximum()
     PCB pcbPtr;
     pcbPtr = findMaxNode(Root);
     count--;
-    //cout << "counting: " << count << endl;
+    cout << "counting -: " << count << endl;
+    return pcbPtr;
+}
+
+PCB ReadyQueue::maxPriority()
+{
+
+    PCB pcbPtr = findPriority(Root);
+
     return pcbPtr;
 }
 
@@ -668,6 +706,8 @@ void ReadyQueue::displayElements(Vertex *V)
       //  display V's element, height and balance and do endl;
       int idV = V -> Elem.id;
       int priorityV = V-> Elem.priority;
+      //int addedQueue = V -> Elem.added;
+      //int removedQueue = V -> Elem.removed;
       //int heightV = V-> Height;
       //int balanceV = V-> Balance;
 
@@ -682,7 +722,9 @@ void ReadyQueue::displayElements(Vertex *V)
               case ProcState::TERMINATED : std::cout << "Terminated"; break;
           }
 
-       cout << ", priority = " << priorityV << endl;
+        cout << ", priority = " << priorityV << endl;
+      //cout << ", priority = " << priorityV << ", added = " << addedQueue;
+      //cout  << " times, removed = "<< removedQueue << " times" << endl;
       //cout << elementV << "   Height: " << heightV << "   Balance: " << balanceV << endl;
       //Display();
       displayElements(V->Left); //  traverse left sub-tree of V recursively
@@ -690,6 +732,68 @@ void ReadyQueue::displayElements(Vertex *V)
 } // end of INorderTraversal function
 
 
+
+void ReadyQueue::exportElements(Vertex *V)
+{
+
+  if (V != NULL) // if current vertex is not null
+    {
+
+      PCB pcbPtr;
+      exportElements(V->Right); //  traverse right sub-tree of V recursively
+      //  display V's element, height and balance and do endl;
+      pcbPtr.id = V -> Elem.id;
+      pcbPtr.priority = V-> Elem.priority;
+      pcbPtr.state = V->Elem.state;
+
+      queueTable.push_back(pcbPtr);
+
+
+      exportElements(V->Left); //  traverse left sub-tree of V recursively
+  } // end of if statement
+} // end of INorderTraversal function
+
+
+
+int ReadyQueue::sizeV(Vertex* V)
+{
+    if (V == NULL)
+    {
+        return 0;
+    } else {
+        return (sizeV(V->Left)+ 1 + sizeV(V->Right));
+    }
+}
+
+int ReadyQueue::rootSize()
+{
+    return sizeV(Root);
+}
+
+
+
+
+void ReadyQueue::exportPCB()
+{
+    //cout << "Display PCB ReadyQueue:" << endl;
+    exportElements(Root);
+
+    // for (unsigned int i = 0; i < queueTable.size(); i++)
+    // {
+    //     cout << queueTable[i].id << "\t\t";
+    //     switch (queueTable[i].state)
+    //     {
+    //         case ProcState::NEW : std::cout << "New"; break;
+    //         case ProcState::READY : std::cout << "Ready"; break;
+    //         case ProcState::RUNNING : std::cout << "Running"; break;
+    //         case ProcState::WAITING : std::cout << "Waiting"; break;
+    //         case ProcState::TERMINATED : std::cout << "Terminated"; break;
+    //     }
+    //
+    //     cout << "\t\t" << queueTable[i].priority << endl;
+    // } // end of for-loop
+
+}
 
 
 void ReadyQueue::displayQueue()

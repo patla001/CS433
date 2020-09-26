@@ -32,6 +32,7 @@ PCBTable::PCBTable()
     //front = 0; // indicate an empty front queue
     //rear = -1; // indicate an empty rear queue
     countTable = 0; // indicate an empty count queue
+
     //string state = "";
 	//for (int pid = 0; pid < MAX_SIZE; pid++){
     //      table.push_back(PCB(pid,ProcState::NEW,0));
@@ -92,16 +93,25 @@ PCBTable::~PCBTable()
 void PCBTable::MakeTable(int size)
 {
 
+    //cout << "size of the table: " << table.size() << endl;
     for (int pid = 0; pid < size; pid++){
         //table.push_back(PCB(pid,ProcState::NEW,pid));
         PCB newPCB = PCB(pid+1,ProcState::NEW,pid+1);
-        table[pid] = newPCB;
+        //table[pid] = newPCB;
+        //table.at(pid) = newPCB;
+        table.push_back(newPCB);
+        table[pid].added = 0;
+		table[pid].removed = 0;
         countTable++;
  	}
 
 
 }
 
+int PCBTable::getSize()
+{
+    return countTable;
+}
 
 void PCBTable::MakeTableRandom(int size)
 {
@@ -110,12 +120,14 @@ void PCBTable::MakeTableRandom(int size)
 	std::mt19937 mt_rand(rd());
 
 
-    for (int pid = 0; pid < size; pid++){
+    for (unsigned int pid = 0; pid < unsigned(size); pid++){
         //table.push_back(PCB(pid,ProcState::NEW,pid));
 
 
         PCB newPCB = PCB(pid+1,ProcState::NEW,mt_rand() % 50);
-        table[pid] = newPCB;
+        //table[pid] = newPCB;
+        //table.at(pid) = newPCB;
+        table.push_back(newPCB);
         countTable++;
 
 
@@ -131,7 +143,9 @@ void PCBTable::displayPCBTable()
     cout <<  "--------------------------------------------------" << endl;
     cout <<  "Proc ID " << "\t" << "State" << "\t\t" << "Priority" << endl;
     cout <<  "--------------------------------------------------" << endl;
-    for (int i = 0; i < MAX_SIZE; i++)
+
+
+    for (unsigned int i = 0; i < table.size(); i++)
     {
         cout << table[i].id << "\t\t";
         switch (table[i].state)
@@ -143,10 +157,53 @@ void PCBTable::displayPCBTable()
             case ProcState::TERMINATED : std::cout << "Terminated"; break;
         }
 
-        cout << "\t\t" << table[i].priority << endl;
-
+        cout << "\t\t" << table[i].priority;
+        cout << ", added = " << table[i].added;
+        cout  << " times, removed = "<< table[i].removed << " times" << endl;
     } // end of for-loop
 } // end of displayPCBTable function.
+
+
+
+// void PCBTable::countPCB(int count)
+// {
+//
+//     switch (table[i].id)
+//     {
+//         case 1 :
+//             added++;
+//             deleted++;
+//             break;
+//         case 2 :
+//             added++;
+//             deleted++;
+//             break;
+//         case 3 :
+//             added++;
+//             deleted++;
+//             break;
+//         case 4 :
+//             added++;
+//             deleted++;
+//             break;
+//         case 5 :
+//             added++;
+//             deleted++;
+//             break;
+//         case 6 :
+//             added++;
+//             deleted++;
+//             break;
+//         case 7 :
+//             added++;
+//             deleted++;
+//         break;
+//     }
+//
+//
+// }
+
+
 
 // PCBTable::PCBTable()
 // {

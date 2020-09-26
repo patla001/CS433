@@ -39,6 +39,11 @@ public:
 	ProcState state;
 	//string state;
 
+	// how many times do you added in the ReadyQueue based on Test 2 for optimizing the time performance.
+	unsigned int added;
+	// how many times do you removed in the ReadyQueue based on Test 2 for optimizition the time performance.
+	unsigned int removed;
+
 	// TODO: Add constructor and other necessary functions for the PCB class
 	PCB();   // constructor to create a blank object.
 	PCB(int, ProcState, int); // to create an initialized PCB object.
@@ -60,7 +65,8 @@ private:
 	//PCB table[MAX_SIZE];
 
 public:
-	PCB table[MAX_SIZE];
+	//PCB table[MAX_SIZE];
+    std::vector<PCB> table;
 	int countTable;
 	PCBTable();
 	~PCBTable();
@@ -68,6 +74,7 @@ public:
 	//bool isFull();
 	//void add(PCB pcbPtr);
 	void MakeTable(int);
+	int getSize();
 	void MakeTableRandom(int size);
 	void displayPCBTable();
 	friend class ReadyQueue;

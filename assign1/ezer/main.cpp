@@ -18,12 +18,14 @@ int main(int argc, char* argv[]) {
 	std::cout << "Description : Program to implement a priority ready queue of processes" << std::endl;
 	std::cout << "=================================" << std::endl;
 
+
 	// TODO: Add your code for Test 1
 	std::cout << "Performing Test 1" << std::endl;
 	//Generating PCB Table with their PCB Object
 	PCBTable p1;
 	int numb_entries = 30;
 	p1.MakeTable(numb_entries);
+
 
 	ReadyQueue q1;
 
@@ -38,17 +40,19 @@ int main(int argc, char* argv[]) {
 		pid = arrayInput1[i];
 		priority = arrayInput1[i];
 		pcbPtr = q1.insertPCB(pid, priority);
-		p1.table[pcbPtr.id-1] = pcbPtr;
+
 	}
+
+
+
 	q1.displayQueue();
 
 
 	for (int j=0; j < 2; j++)
 	{
-		cout << "remove the process with the hiighest priority from q1 and display q1." << endl;
+		cout << "remove the process with the highest priority from q1 and display q1." << endl;
 		PCB pcbPtr;
 		pcbPtr = q1.findMaximum();
-		p1.table[pcbPtr.id - 1] = pcbPtr;
 		q1.displayQueue();
 	}
 
@@ -62,118 +66,182 @@ int main(int argc, char* argv[]) {
 		pid = arrayInput2[i];
 		priority = arrayInput2[i];
 		pcbPtr = q1.insertPCB(pid, priority);
-		p1.table[pcbPtr.id-1] = pcbPtr;
+
 	}
 
 	q1.displayQueue();
 
+
 	cout << "One by one remove the process with the highest priority from the queue q1" << endl;
 
-	int sizeQueueQ1 = q1.ReadyQueue::getSize();
-	//cout << "size of queue: " << q1.ReadyQueue::getSize() - 1 << endl;
+	int sizeQueueQ1 = q1.rootSize();
+
 	for (int i=0; i<sizeQueueQ1; i++)
 	{
-		//cout << "size of queue: " << q1.ReadyQueue::getSize() - 1<< endl;
-		int sizeQueue = q1.ReadyQueue::getSize() - 1;
-		if (sizeQueue == 0)
+
+
+		int sizeQueue = q1.rootSize();
+
+		if (sizeQueue == 1)
 		{
-			cout << "q1 is Empty" << endl;
+			// deleting the last object and pointers.
+			q1.~ReadyQueue();
+			cout << "q1 is Empty: " <<  endl;
 			break;
 
 		} else {
 			PCB pcbPtr;
 			pcbPtr = q1.findMaximum();
-			p1.table[pcbPtr.id - 1] = pcbPtr;
+			cout << "size queue: " << sizeQueue << endl;
 			q1.displayQueue();
+
 		}
 
-
 	}
+	q1.displayQueue();
 
-	p1.displayPCBTable();
+
 	// TODO: Add your code for Test 2
 	std::cout << "Performing Test 2" << std::endl;
 
 	std::random_device rd;
 	std::mt19937 mt_rand(rd());
-	int totalIterations = 10;
-
-
+	int totalIterations = 50;
+	//int totalIterations = 30;
 
 	// Create array containing 50 percent probability as index value e.g., 1 or 0
 	int fiftyPercent[totalIterations];
 	for (int i=0; i< totalIterations; i++)
 	{
-		//cout << "PID: " << i+1 << " random numbers: " << mt_rand() % 2 << endl;
-		fiftyPercent[i] = mt_rand() % 2;
-	}
 
-	// Create array containig random values from 0 to 50.
-	// initialize array size of the total iterations
-	int iter[totalIterations];
-	for (int i=0; i<totalIterations;i++)
-	{
-		iter[i] = mt_rand() % 50;
+		fiftyPercent[i] = rand() % 2;
+
 	}
 
 
 	// randomly select 15 process from the PCB Table.
 	numb_entries = 15;
-	p1.MakeTableRandom(numb_entries);
-	p1.displayPCBTable();
+
+
 	for (int i = 0; i < numb_entries; i++ )
 	{
+		PCB pcbPtr;
 		pid = p1.table[i].id;
-		priority = p1.table[i].priority;
+		priority = mt_rand() % 50;
+		//cout << "PID: " << pid << ", Priority: " << priority << endl;
 		q1.insertPCB(pid, priority);
+		p1.table[i].priority=rand() % 50;
+		p1.table[i].added = 0;
+		p1.table[i].removed = 0;
+
 	}
+	PCBTable p2;
+
+	p2 = p1;
+
+
+
+	q1.displayQueue();
+	p1.displayPCBTable();
+
+
+
+	cout << "size Q: " << q1.rootSize() << endl;
 
 	auto begin = std::chrono::high_resolution_clock::now();
-	int countDelete=0;
-	int countAdd=0;
-	//q1.displayQueue();
-	// Begin iterating and measuring the total time of running the loop.
+	//int sizeQ = q1.rootSize();
+	int countAdd = 0;
+	int countDelete = 0;
+	//int sizeQ = q1.rootSize();
 	for (int i = 0; i < totalIterations; i++)
 	{
 		switch (fiftyPercent[i]) {
 			case 0:
 			{
-				// remove the object from the queue.
-				// if q1 is empty, then no process should be removed.
-				int sizeQueue = q1.ReadyQueue::getSize() - 1;
-				if (sizeQueue != 0)
+				int sizeQ = q1.ReadyQueue::getSize();
+				cout << "sizeQ+: " << sizeQ << endl;
+				if (sizeQ !=0 )
 				{
-					// delete an element from q1 queue
-					// and save the highest priority object
-					PCB pcbPtr = q1.findMaximum();
-					// PCBTable update from q1 queue -> highest priority object.
-					// [pcbPtr.id - 1] index = 0..9
-					// [pcbPtr.id] index = 1..10
-					p1.table[pcbPtr.id - 1] = pcbPtr;
-					// countDelete++;
-				}
+					countDelete++;
+					//q1.displayQueue();
+					PCB pcbPtr1;
+					pcbPtr1 = q1.maxPriority();
+					cout << "==============================" << endl;
+					cout << "PCB ID = "<< pcbPtr1.id << ", Priority = " << pcbPtr1.priority;
+					cout << ", removed " << countDelete << " times" << endl;
+					cout << "==============================" << endl;
+					if ( p1.table[pcbPtr1.id-1].priority == pcbPtr1.priority )
+	 				{
+						q1.displayQueue();
+						PCB pcbPtr = q1.findMaximum();
+	 					//p1.table[pcbPtr.id-1].state = ProcState::RUNNING;
+	 					//p1.table[pcbPtr.id-1].removed = countDelete++;
 
-				break;
+						pcbPtr.state = ProcState::RUNNING;
+						pcbPtr.removed = countDelete;
+
+
+						p2.table[pcbPtr.id-1].id=pcbPtr.id;
+						p2.table[pcbPtr.id-1].priority=pcbPtr.priority;
+						p2.table[pcbPtr.id-1].state=ProcState::RUNNING;
+						p2.table[pcbPtr.id-1].removed = countDelete;
+
+						cout << "==============================" << endl;
+						cout << "PCB ID = "<< pcbPtr.id << ", Priority = " << pcbPtr.priority;
+						cout << ", removed " << countDelete << " times" << endl;
+						cout << "==============================" << endl;
+						//p1.table.push_back(pcbPtr);
+						p1.table[pcbPtr.id-1] = pcbPtr;
+
+						break;
+	 				}
+				}
 			}
-			case 1:
+			case 1 :
 			{
-				// insert an object from the queue.
-				// PCB pcbPtr;
-				// pid = arrayInput1[i];
-				// priority = arrayInput1[i];
-				// pcbPtr = q1.insertPCB(pid, priority);
-				// p1.table[pcbPtr.id-1] = pcbPtr;
-				//countAdd++;
-				break;
+				//int sizeQ = q1.ReadyQueue::getSize();
+				if (!p1.table.empty())
+				{
+
+					countAdd++;
+					PCB pcbPtr;
+					q1.displayQueue();
+					int sizeQ = q1.rootSize();
+					cout << "sizeQ-: " << sizeQ << endl;
+					pcbPtr = p1.table.back();
+					pcbPtr.priority = rand() % 50;
+					pcbPtr.state = ProcState::READY;
+					pcbPtr.removed = countAdd;
+					q1.insertPCB(pcbPtr.id,pcbPtr.priority);
+					cout << "==============================" << endl;
+					cout << "PCB ID = "<< pcbPtr.id << ", Priority = " << pcbPtr.priority;
+					cout << ", added " << countAdd << " times" << endl;
+					cout << "==============================" << endl;
+
+
+					p2.table[pcbPtr.id-1].id=pcbPtr.id;
+					p2.table[pcbPtr.id-1].priority=pcbPtr.priority;
+					p2.table[pcbPtr.id-1].state=ProcState::READY;
+					p2.table[pcbPtr.id-1].added = countAdd;
+
+
+					p1.table.pop_back();
+
+					break;
+				}
 			}
 		}
 	}
 
+
+	p1.displayPCBTable();
+	p2.displayPCBTable();
+
+
 	auto end = std::chrono::high_resolution_clock::now();
 	double elapsedTime = std::chrono::duration_cast<std::chrono::microseconds> (end - begin).count();
 
+	std::cout << "Test 2 time: " << elapsedTime / 1000 << " ms.\n";
 
-	//q1.displayQueue();
-	std::cout << "Test 2 elapsed time: " << elapsedTime / 1000 << " ms.\n";
 
 }
