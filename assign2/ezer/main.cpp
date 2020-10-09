@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstdlib>
+#include <string>
+#include <cstring>
 #include "UnixShell.h"
 
 using namespace std;
@@ -17,6 +19,24 @@ int main(int argc, char* argv[]) {
 	// TODO: Add your code for Test 1
 	std::cout << "Performing Execution in Shell Commands" << std::endl;
 
-        UnixShell osh;
-	osh.execShell();
-}
+    UnixShell osh;
+	// infinative while loop
+	while(osh.running)
+	{
+		char buffer[MAX];
+		char * args[MAX / 2 + 1];
+		// Display in the terminal osh>>
+		std:: cout << "osh>> ";
+		std:: cout.flush();
+		// character array
+		std::cin.getline(buffer, MAX);
+
+		// parseline functions allows the user to
+		// save the commands and arguments into an array
+		osh.parseline(buffer, args);
+		// Ezer's working on Pipe Function (execPipe)
+		//osh.execPipe(args);
+		// execShell functions applies fork(), dup2(), exec(), and wait()
+		osh.execShell(args);
+	}// end of while loop.
+};  // end of the main program.

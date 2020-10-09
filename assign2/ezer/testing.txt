@@ -1,0 +1,5 @@
+1 pipe()
+2 dup2()
+3 exec()
+4 fork()
+5 wait()
