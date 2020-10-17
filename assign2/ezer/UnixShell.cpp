@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
+#include <stdio.h>
+#include <stdlib.h>
 #include <cstring>
 #include <iostream>
 #include <sys/wait.h>
@@ -7,10 +9,17 @@
 #include <string>
 #include <fcntl.h>
 #include <array>
+#include <sstream>
 #include "UnixShell.h"
 
 using namespace std;
 
+/*UnixShell::UnixShell(string acommand, int apid)
+{
+    string command = acommand;
+    int pid = apid;
+}
+*/
 //PURPOSE: This function parses the buffer into arguments.
 //PARAMETERS: buffer [] = the command.
 //            args[] = the arguments in the command.
@@ -22,6 +31,7 @@ void UnixShell::parseline(char buffer[], char * args[])
 
     while (p != NULL) {
         args[i] = p;
+        printf("%d %s\n", i, p);
         p = strtok(NULL, " ");
         i++;
     }
@@ -31,13 +41,31 @@ void UnixShell::parseline(char buffer[], char * args[])
     {
         args[i - 1] = NULL;
         ampersand = true;
-    } else {
+    } else{
         // terminated argmument list with null.
         args[i] = NULL;
         ampersand = false;
     }
+
 }
 
+void UnixShell::displayHistory()
+{
+    if (history.empty())
+    {
+        cout << "command history is empty" << endl;
+    }
+    else {
+        //int start = (history.size() < 10) ? 0 : history.size() - 10;
+        int start = 0;
+        // display history
+
+        for (int i = start; i < history.size(); i++)
+        {
+            cout << " " << i + 1 << " " << history[i] << endl;
+        }
+    }
+}
 
 // Cody's implement execUserCommand
 // we need to provide a history command in order to cancel or terminate the
@@ -45,20 +73,84 @@ void UnixShell::parseline(char buffer[], char * args[])
 // Please look over isaychris from Github as a reference
 // to help you build the function.
 // https://github.com/isaychris/CS433/blob/master/CS433_Lab2/Shell.cpp
-void UnixShell::execUserCommand(char* arg[])
+void UnixShell::execUserCommand(char * arg[])
 {
-    // Cody's code
+
+    string command(arg[0]);
+
+    if (command == "exit")
+    {
+        running = false;
+    } else if (command == "history")
+    {
+        displayHistory();
+    }
+
+    else if (command[0] == '!') {
+        char buffer[MAX];
+        char * args[MAX / 2 + 1];
+        int N;
+
+        if (command == "!!")
+        {
+            // input error
+            if (history.empty())
+            {
+                cout << "No commands in history" << endl;
+                return;
+            }
+
+            N = history.size();
+        } else {
+
+            string temp = command.substr(1, command.length());
+            N = atoi(temp.c_str());
+            // last command to show
+            int min = (history.size() < 10) ? 0 : history.size() - 10;
+
+            if (N > history.size() || N < min + 1)
+            {
+                cout << " No such command in history" << endl;
+                return;
+            }
+        }
+
+        cout << history[N-1] << endl;
+
+        // copy command into a buffer, so it can be parsed and executed
+        //cout << "history: " << history[0] << endl;
+        //cout << "!! helper: " << processID << endl;
+        strcpy(buffer, history[N-1].c_str());
+        saveCommand(buffer);
+        parseline(buffer, args);
+        saveHistory=true;
+        //execShell(history, saveHistory);
+        execShell(args, saveHistory,buffer);
+    }
+
+
+
 }
 // execute history command or exit the program
 bool UnixShell::isUserCommand(char * arg[])
 {
-    // Cody's code
+
+    string command(arg[0]);
+
+    if (command == "exit" || command == "history" || command[0] == '!')
+    {
+        return true;
+    }
+    // command is a shell command;
+    return false;
+
 }
 // save the history from the user's terminal.
 void UnixShell::saveCommand(char command[])
 {
 	string save(command);
-	history.push_back(save);
+	//history.push_back(save);
+    helper.push_back(save);
 }
 
 
@@ -138,31 +230,45 @@ void UnixShell::execPipe(char * args[])
 }
 
 // For the moment we are using the execShell to executive the commands without the pipe.
-void UnixShell::execShell(char * args[])
+void UnixShell::execShell(char * args[], bool saveHistory, char buffer[] )
 {
+
+
+
+
+    std::stringstream ss;
     int rc = fork();
     if (rc < 0) {
         // fork failed
         fprintf(stderr, "fork failed\n");
         exit(1);
     } else if (rc == 0) {
-        printf("hello, I am child (pid:%d)\n", (int) getpid());
+        int processID = getpid();
+        printf("hello, I am child (pid:%d)\n", processID);
         // child: redirect standard output to a file
-        //close(STDOUT_FILENO);
-        //open("./p4.output", O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
-        // now exec "wc"...
-        //char* myargs[3];
-        //myargs[0] = strdup("wc");   // program: wc (word count)
-        //myargs[1] = strdup("UnixShellTest.cpp"); // arg: file to count
-        //myargs[2] = NULL;           // mark end of array
+        close(STDOUT_FILENO);
+        open("./p4.output", O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
+        now exec "wc"...
+        char* myargs[3];
+        myargs[0] = strdup("wc");   // program: wc (word count)
+        myargs[1] = strdup("UnixShellTest.cpp"); // arg: file to count
+        myargs[2] = NULL;           // mark end of array
+
+
+
+
+
+
         execvp(args[0], args);  // runs word count
-        printf("this shouldn’t print out");
+        //printf("this shouldn’t print out\n");
+        printf("command not found, please kill the process: PID is (%d)\n ", processID);
     } else {
             // parent goes down this path (main
         int rc_wait = wait(NULL);
         printf("hello, I am parent of %d (rc_wait:%d) (pid:%d)\n",
         rc, rc_wait, (int) getpid());
     }
+
 }
 
 UnixShell::UnixShell()

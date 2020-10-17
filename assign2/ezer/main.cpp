@@ -24,19 +24,46 @@ int main(int argc, char* argv[]) {
 	while(osh.running)
 	{
 		char buffer[MAX];
+		char bufferSave[MAX];
 		char * args[MAX / 2 + 1];
 		// Display in the terminal osh>>
 		std:: cout << "osh>> ";
 		std:: cout.flush();
 		// character array
 		std::cin.getline(buffer, MAX);
-
+		strcpy(bufferSave, buffer);
 		// parseline functions allows the user to
 		// save the commands and arguments into an array
 		osh.parseline(buffer, args);
 		// Ezer's working on Pipe Function (execPipe)
 		//osh.execPipe(args);
+
+			//cout << "buffer size: " << size(buffer) << endl;
+
+
+
+		//while ()
+
+		osh.saveCommand(bufferSave);
+
+		if (osh.isUserCommand(args))
+		{
+			osh.execUserCommand(args);
+		} else {
+
+			bool saveHistory = false;
+			osh.execShell(args, saveHistory,buffer);
+		}
+		/*if (osh.isUserCommand(args))
+		{
+			osh.execUserCommand(args);
+		} else {
+			//osh.saveCommand(bufferSave);
+			bool saveHistory=false;
+			//osh.execShell(history)
+			osh.execShell(args, saveHistory);
+		}*/
 		// execShell functions applies fork(), dup2(), exec(), and wait()
-		osh.execShell(args);
+		//osh.execShell(args);
 	}// end of while loop.
 };  // end of the main program.
