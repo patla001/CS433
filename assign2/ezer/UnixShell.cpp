@@ -74,7 +74,7 @@ void UnixShell::displayHistory()
         int start = 0;
         // display history
 
-        for (int i = start; i < history.size(); i++)
+        for (unsigned int i = start; i < history.size(); i++)
         {
             cout << " " << i + 1 << " " << history[i] << endl;
         }
@@ -100,7 +100,7 @@ void UnixShell::execUserCommand(char * arg[])
         // intialize the variables
         char buffer[MAX];
         char * args[MAX / 2 + 1];
-        int N;
+        unsigned int N;
 
         if (command == "!!")
         {
@@ -117,7 +117,7 @@ void UnixShell::execUserCommand(char * arg[])
             string temp = command.substr(1, command.length());
             N = atoi(temp.c_str());
             // it shows the last command
-            int min = (history.size() < 10) ? 0 : history.size() - 10;
+            unsigned int min = (history.size() < 10) ? 0 : history.size() - 10;
 
             if (N > history.size() || N < min + 1)
             {
