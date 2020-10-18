@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
 	// infinative while loop
 	while(osh.running)
 	{
+		// intitalize the variables
 		char buffer[MAX];
 		char bufferSave[MAX];
 		char * args[MAX / 2 + 1];
@@ -35,35 +36,20 @@ int main(int argc, char* argv[]) {
 		// parseline functions allows the user to
 		// save the commands and arguments into an array
 		osh.parseline(buffer, args);
-		// Ezer's working on Pipe Function (execPipe)
-		//osh.execPipe(args);
-
-			//cout << "buffer size: " << size(buffer) << endl;
 
 
-
-		//while ()
-
+		// save the commands to history array.
 		osh.saveCommand(bufferSave);
-
+		// if the the commands are non unix the if statement is true.
 		if (osh.isUserCommand(args))
 		{
+			// execute the non unix commands.
 			osh.execUserCommand(args);
 		} else {
 
-			bool saveHistory = false;
-			osh.execShell(args, saveHistory,buffer);
+			// execute the unix commands.
+			osh.execShell(args,bufferSave);
 		}
-		/*if (osh.isUserCommand(args))
-		{
-			osh.execUserCommand(args);
-		} else {
-			//osh.saveCommand(bufferSave);
-			bool saveHistory=false;
-			//osh.execShell(history)
-			osh.execShell(args, saveHistory);
-		}*/
-		// execShell functions applies fork(), dup2(), exec(), and wait()
-		//osh.execShell(args);
+
 	}// end of while loop.
 };  // end of the main program.

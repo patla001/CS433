@@ -14,12 +14,25 @@
 
 using namespace std;
 
-/*UnixShell::UnixShell(string acommand, int apid)
+
+//PURPOSE: This function counts the total
+// number of characters inside the array.
+//PARAMETERS: buffer [] = the command.
+//
+int UnixShell::countChar(char buffer[])
 {
-    string command = acommand;
-    int pid = apid;
+    int i = 0;
+    // buffer tokenized using loop.
+    char * p = strtok(buffer, " ");
+    // while loop and stops until is NULL.
+    while (p != NULL) {
+        // it nulls the pointer
+        p = strtok(NULL, " ");
+        i++;
+    }
+    // save the total number of characters.
+    return i;
 }
-*/
 //PURPOSE: This function parses the buffer into arguments.
 //PARAMETERS: buffer [] = the command.
 //            args[] = the arguments in the command.
@@ -31,7 +44,7 @@ void UnixShell::parseline(char buffer[], char * args[])
 
     while (p != NULL) {
         args[i] = p;
-        printf("%d %s\n", i, p);
+        //printf("%d %s\n", i, p);
         p = strtok(NULL, " ");
         i++;
     }
@@ -41,7 +54,7 @@ void UnixShell::parseline(char buffer[], char * args[])
     {
         args[i - 1] = NULL;
         ampersand = true;
-    } else{
+    } else {
         // terminated argmument list with null.
         args[i] = NULL;
         ampersand = false;
@@ -51,12 +64,13 @@ void UnixShell::parseline(char buffer[], char * args[])
 
 void UnixShell::displayHistory()
 {
+    // The array will print empty if there is no history.
     if (history.empty())
     {
-        cout << "command history is empty" << endl;
+        cout << "history is empty" << endl;
     }
     else {
-        //int start = (history.size() < 10) ? 0 : history.size() - 10;
+
         int start = 0;
         // display history
 
@@ -67,12 +81,8 @@ void UnixShell::displayHistory()
     }
 }
 
-// Cody's implement execUserCommand
-// we need to provide a history command in order to cancel or terminate the
-// processes. We need at least 10 previous history commands from the user.
-// Please look over isaychris from Github as a reference
-// to help you build the function.
-// https://github.com/isaychris/CS433/blob/master/CS433_Lab2/Shell.cpp
+// the execUserCommand function uses command that does not belong to the
+// Unix commands.
 void UnixShell::execUserCommand(char * arg[])
 {
 
@@ -86,26 +96,27 @@ void UnixShell::execUserCommand(char * arg[])
         displayHistory();
     }
 
-    else if (command[0] == '!') {
+    else  {
+        // intialize the variables
         char buffer[MAX];
         char * args[MAX / 2 + 1];
         int N;
 
         if (command == "!!")
         {
-            // input error
+            // if the history is empty
             if (history.empty())
             {
                 cout << "No commands in history" << endl;
                 return;
             }
-
+            // total number of commands
             N = history.size();
         } else {
 
             string temp = command.substr(1, command.length());
             N = atoi(temp.c_str());
-            // last command to show
+            // it shows the last command
             int min = (history.size() < 10) ? 0 : history.size() - 10;
 
             if (N > history.size() || N < min + 1)
@@ -117,15 +128,15 @@ void UnixShell::execUserCommand(char * arg[])
 
         cout << history[N-1] << endl;
 
-        // copy command into a buffer, so it can be parsed and executed
-        //cout << "history: " << history[0] << endl;
-        //cout << "!! helper: " << processID << endl;
+
+        // it copy another array to read the arguments correctly.
         strcpy(buffer, history[N-1].c_str());
+        // saves the commands into array
         saveCommand(buffer);
+        // convert the array vector into character vector.
         parseline(buffer, args);
-        saveHistory=true;
-        //execShell(history, saveHistory);
-        execShell(args, saveHistory,buffer);
+        // execute the command under previous history.
+        execShell(args,buffer);
     }
 
 
@@ -137,7 +148,7 @@ bool UnixShell::isUserCommand(char * arg[])
 
     string command(arg[0]);
 
-    if (command == "exit" || command == "history" || command[0] == '!')
+    if (command == "exit" || command == "history" )
     {
         return true;
     }
@@ -149,121 +160,60 @@ bool UnixShell::isUserCommand(char * arg[])
 void UnixShell::saveCommand(char command[])
 {
 	string save(command);
-	//history.push_back(save);
-    helper.push_back(save);
+    history.push_back(save);
 }
 
 
-// Ezer's work on the execPipe Function.
-// PURPOSE: This function executes a shell command.
-// PARAMETERS: args[] = the arguments in the command.
-void UnixShell::execPipe(char * args[])
+// execShell implements the fork(), wait(), execvp() and dup2().
+void UnixShell::execShell(char * args[], char buffer[] )
 {
-
-    // arguments for commands; your parser would be responsible for
-    // setting up arrays like these
-
-    //char  *cat_args[] = {"cat","Testing.txt", NULL};
-    //char  *grep_args[] = {"grep","fork()", NULL};
-
-    // make 1 pipe (cat to grep ); each has fds
-
-    int pipes[2];
-    // sets up 1st pipe
-    pipe(pipes);
-
-    // we now have 2 fds:
-    // pipe[0] = read end of cat-> grep pipe (read by grep)
-    // pipe[1] = write end of cat -> grep pipe (written by cat)
-
-    // Note that the code in each if is basically identical, so you
-    // could set up a loop to handle it. The differences are in the
-    // indicies into pipes used for the dup2 system call
-    // and that the 1st and last only deal with the end of one pipe.
-
 
     int rc = fork();
     if (rc < 0) {
         // fork failed
         fprintf(stderr, "fork failed\n");
-        exit(1);
-    }
-    else if (rc == 0)
-    {
-	    //int pipes[2];
-        //pipe(pipes);
-        printf("hello, I am child (pid:%d)\n", (int) getpid());
-        // replace cat's stdout with write part of 1st pipe
-        dup2(pipes[1],1);
-        // close all pipes (very important!); end we're using was safely copied
-        close(pipes[0]);
-        close(pipes[1]);
-
-        //execvp(*cat_args, cat_args);
-        execvp(args[0], args);
-
-    } else if ( rc > 0 )
-    {
-        // parent goes down this path (main)
-        printf("hello, I am child (pid:%d)\n", (int) getpid());
-            dup2(pipes[0],0);
-            close(pipes[0]);
-            close(pipes[1]);
-
-            //execvp(*grep_args, grep_args);
-            execvp(args[0], args);
-
-
-        if (ampersand == false )
-        {
-            // only the parent gets here and waits for 3 children to finish
-            close(pipes[0]);
-            close(pipes[1]);
-            printf("hello, I am parent of %d (rc_wait:%d) (pid:%d)\n",
-            rc, wait(NULL), (int) getpid());
-        }
-
-
-    }
-
-
-}
-
-// For the moment we are using the execShell to executive the commands without the pipe.
-void UnixShell::execShell(char * args[], bool saveHistory, char buffer[] )
-{
-
-
-
-
-    std::stringstream ss;
-    int rc = fork();
-    if (rc < 0) {
-        // fork failed
-        fprintf(stderr, "fork failed\n");
-        exit(1);
+        exit(1); // it exits the program.
     } else if (rc == 0) {
+        // this is the child if statement.
         int processID = getpid();
         printf("hello, I am child (pid:%d)\n", processID);
         // child: redirect standard output to a file
-        close(STDOUT_FILENO);
-        open("./p4.output", O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
-        now exec "wc"...
-        char* myargs[3];
-        myargs[0] = strdup("wc");   // program: wc (word count)
-        myargs[1] = strdup("UnixShellTest.cpp"); // arg: file to count
-        myargs[2] = NULL;           // mark end of array
 
 
 
+        // determines the correct size of the array characters.
+        int i = countChar(buffer);
+
+        // if the user executes output command greather than it will implement
+        // true in the if statement.
+        if (strcmp(args[i - 2], ">") == 0)
+        {
+            // it opens the output file.
+            int fd = open(args[i-1], O_CREAT | O_WRONLY | O_TRUNC, 0666);
+            if (fd == -1 ) // if the file fails it exits.
+            {
+                // prints the error inside the file.
+                perror(args[0]);
+                exit(1);
+            }
+            dup2(fd, 1);   // make stdout go to file.
+
+            close(fd);      // closes the open file.
+
+            execvp(args[0], args); // executes the command inside the child
+            // prints the error if the unix command does not exists.
+            printf("command not found, please kill the process: PID is (%d)\n ", processID);
+        } else {
+            // else there is no input or output text
+            execvp(args[0], args);
+            // prints the error if the unix command does not exists.
+            printf("command not found, please kill the process: PID is (%d)\n ", processID);
+        }
 
 
-
-        execvp(args[0], args);  // runs word count
-        //printf("this shouldn’t print out\n");
-        printf("command not found, please kill the process: PID is (%d)\n ", processID);
     } else {
-            // parent goes down this path (main
+            // parent goes down this path
+            // this is the wait function. It waits then it will exit the program.
         int rc_wait = wait(NULL);
         printf("hello, I am parent of %d (rc_wait:%d) (pid:%d)\n",
         rc, rc_wait, (int) getpid());
