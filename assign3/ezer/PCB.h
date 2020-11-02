@@ -15,15 +15,20 @@ class PCB
   int id; // id process
   int priority; // priority process
   int burst; // burst time
-
+  int tatime; // turnaround time
+  int wtime; // waiting time
 
  public:
 
   PCB();  // to create a blank PCB object
-  PCB(string name, int tid, int priority, int burst); // to create an initialized PCB object
+  PCB(string name, int id, int priority, int burst, int tatime, int wtime); // to create an initialized PCB object
 
   bool operator==(PCB);  // overload == for search
   bool operator!=(PCB);  // overload != for search
+  bool operator>=(PCB);  // overload <= for sorting
+  bool operator>(PCB);   // overload <= for sorting
+  bool operator<(PCB);
+  bool operator<=(PCB);
   // In search == is used to compare node elements
   // but what does it mean for this client to compare
   // node elements?

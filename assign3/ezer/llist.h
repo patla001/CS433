@@ -108,14 +108,13 @@ protected:
   void insertIth(int, PCB);
 
   // sorts the linked list by changing next pointers (not data)
-
-  void Sorting();
-  void insertionSort(Node **head); 
-  void sortedInsert(Node **head, Node *newTemp);
+  void turnaroundTime();
+  float avgturningTime();
+  void waitingTime();
+  float avgwaitingTime();
   //Copy Constructor to allow pass by value and return by value
   llist(const llist&);
 
   //Overloading of = for allowing the client to use = for linked list objects.
   llist& operator=(const llist&);
-
 }; // end of llist class.

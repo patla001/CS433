@@ -63,8 +63,8 @@ bool llist::isEmpty() {
 // PARAMETER: no parameters are need since is displaying the llist.
 void llist::displayAll() {
 
-    cout << "[Name]  [ID]  [Priority]  [Burst]" << endl;
-    cout << "-------------------------------"<< endl; 
+    cout << "[Name]  [ID]  [Priority]     [Burst]  [Turnaround Time]  [Waiting Time]" << endl;
+    cout << "----------------------------------------------------------------------"<< endl; 
     Node *temp = new Node;
     temp = Front;
     if (this -> isEmpty()) { // if empty print empty
@@ -73,7 +73,8 @@ void llist::displayAll() {
         //cout << "[ ";
         while (temp!=NULL) // go through the llist
         {
-            cout << temp -> Elem.name << "\t" << temp -> Elem.id << "\t" << temp -> Elem.priority << "\t" << temp -> Elem.burst << "\t"<< endl;
+            cout << temp -> Elem.name << "\t" << temp -> Elem.id << "\t  " << temp -> Elem.priority;
+	    cout  << "\t\t" << temp -> Elem.burst << "\t\t"<< temp -> Elem.tatime << "\t\t" << temp -> Elem.wtime << endl;
             
             temp = temp -> Next;
         } // end of while loop
@@ -358,50 +359,110 @@ void llist::insertIth(int I, PCB newNum) {
 } // end of insertIth function
 
 
-void llist::Sorting()
-{
 
+void llist::turnaroundTime()
+{
+      Node *temp = new Node;
+      int ttcurr, ttprev, time;
+      temp = Front;
+      if (this -> isEmpty()) { // if empty print empty
+          cout << "[ empty ]" << endl;
+      } else {// end of if statement.
+          //cout << "[ ";
+          while (temp!=NULL) // go through the llist
+          {
+	      if (temp-> Elem.id == 1)
+	      {
+		      ttcurr = temp -> Elem.burst;
+		      ttprev = ttcurr;
+		      temp -> Elem.tatime = ttcurr;
+	      } else {
+		      ttcurr = temp -> Elem.burst;
+		      time = ttcurr + ttprev;
+		      ttprev = time;
+		      temp -> Elem.tatime = time;
+	      }	      
+
+              temp = temp -> Next;
+	      
+          } // end of while loop
+      }
+  
+}
+
+float llist::avgturningTime()
+{
 	Node *temp = new Node;
+       temp = Front;
+       int countTime = 0;
+       float avg=0;
+       int sum = 0;
+       if (this -> isEmpty()) { // if empty print empty
+           cout << "[ empty ]" << endl;
+       } else {// end of if statement.
+           //cout << "[ ";
+           while (temp!=NULL) // go through the llist
+           {
+               sum += temp -> Elem.tatime;
+               countTime++;
+ 
+               temp = temp -> Next;
+ 
+           } // end of while loop
+       }
+
+       avg = (double)sum /countTime;
+       return avg;
+
+}
+
+
+void llist::waitingTime()
+{
+       Node *temp = new Node;
+       int turntime, waittime, tburst;
+       temp = Front;
+       if (this -> isEmpty()) { // if empty print empty
+           cout << "[ empty ]" << endl;
+       } else {// end of if statement.
+           //cout << "[ ";
+           while (temp!=NULL) // go through the llist
+           {
+	       tburst = temp -> Elem.burst;
+	       turntime = temp -> Elem.tatime;
+	       waittime = turntime - tburst;
+	       temp -> Elem.wtime = waittime;
+               temp = temp -> Next;
+
+           } // end of while loop
+       
+       }
+}
+
+float llist::avgwaitingTime()
+{
+        Node *temp = new Node;
+	float sum = 0;
+	float avg;
+	int countTime = 0;
         temp = Front;
-	this -> insertionSort(&temp);
+        if (this -> isEmpty()) { // if empty print empty
+            cout << "[ empty ]" << endl;
+        } else {// end of if statement.
+            //cout << "[ ";
+            while (temp!=NULL) // go through the llist
+            {
+		sum += temp -> Elem.wtime;
+                countTime++;
+                temp = temp -> Next;
+ 
+            } // end of while loop
+ 
+        }
+	avg = (double)sum /countTime;
+	return avg;
 }
 
-
-
-void llist::insertionSort(Node **head)
-{
-	Node *sorted = NULL;
-	Node *current = *head;
-
-	while (current != NULL)
-	{
-		Node *temp = current -> Next;
-
-		this-> sortedInsert(&sorted, current);
-
-		current = temp;
-	}
-	*head = sorted;
-}
-
-void llist::sortedInsert(Node **head, Node *newTemp)
-{
-	Node *current = new Node;
-
-	if (*head == NULL || (*head)-> Elem.priority >= newTemp -> Elem.priority)
-	{
-		newTemp -> Next = *head;
-		*head = newTemp;
-	} else {
-		current = *head;
-		while (current -> Next != NULL && current -> Next -> Elem.priority < newTemp -> Elem.priority)
-		{
-			current = current -> Next;
-		}
-		newTemp -> Next = current -> Next;
-		current -> Next = newTemp;
-	}
-}
 
 
 

@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
     int id = 1;
     int priority;
     int burst;
+    int tt = 0;
+    int wtime = 0;
     llist Q1; // initalize linked list queue
     // open the input file
     std::ifstream infile(argv[1]);
@@ -72,14 +74,18 @@ int main(int argc, char *argv[])
 	
 	PCB X; // initialize object
 	//X = PCB("P1", 4, 1, 3);
-    	X = PCB(name,id,priority,burst); 
+    	X = PCB(name,id,priority,burst,tt,wtime); 
     	
 	Q1.addRear(X);
 	id++;
     }
-     //Q1.displayAll();
-     Q1.Sorting();
+     Q1.turnaroundTime();
+     float avgtt = Q1.avgturningTime();
+     Q1.waitingTime();
+     float avgwtime = Q1.avgwaitingTime();
      Q1.displayAll();
+     cout << "Average Turnaround Time: " << avgtt << endl;
+     cout << "Average Waiting Time: " << avgwtime << endl;
     // TODO: Add your code to run the scheduler and print out statistics
 
     return 0;

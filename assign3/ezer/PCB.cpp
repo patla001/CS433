@@ -12,15 +12,19 @@ PCB::PCB()
   id = -1;
   priority = -1;
   burst = -1;
+  tatime = -1;
+  wtime = -1;
 }
 
 // initializing constructor to create an el_t object
-PCB::PCB(string tname, int tid, int tpriority, int tburst)
+PCB::PCB(string tname, int tid, int tpriority, int tburst, int ttatime, int twtime)
 {
   name = tname;
   id = tid;
   priority = tpriority;
   burst = tburst;
+  tatime = ttatime;
+  wtime = twtime;
 
 }
 
@@ -34,6 +38,28 @@ bool PCB::operator==(PCB OtherOne)
 bool PCB::operator!=(PCB OtherOne)
 {
   if (id != OtherOne.id) return true; else return false;
+}
+
+bool PCB::operator>=(PCB OtherOne)
+{
+   if (priority >= OtherOne.priority) return true; else return false;
+//	return priority >= OtherOne.priority;
+}
+
+bool PCB::operator>(PCB OtherOne)
+{
+   if (priority > OtherOne.priority) return true; else return false;	
+	//return priority < OtherOne.priority;
+}
+
+bool PCB::operator<=(PCB OtherOne)
+{
+	 if (priority <= OtherOne.priority) return true; else return false;
+}
+
+bool PCB::operator<(PCB OtherOne)
+{
+	if (priority < OtherOne.priority) return true; else return false;
 }
 
 // overload cout
