@@ -108,12 +108,10 @@ protected:
   void insertIth(int, PCB);
 
   // sorts the linked list by changing next pointers (not data)
-  Node* SortedMerge(Node* a, Node* b);
 
-  void MergeSort(Node** headRef);
-  
-  void FrontBackSplit(Node* source, Node** frontRef, Node** backRef);
-
+  void Sorting();
+  void insertionSort(Node **head); 
+  void sortedInsert(Node **head, Node *newTemp);
   //Copy Constructor to allow pass by value and return by value
   llist(const llist&);
 

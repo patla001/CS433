@@ -19,7 +19,7 @@
 //File type: llist.cpp implementation file
 //=====================================================
 
-using namespace std;
+//using namespace std;
 #include<iostream>
 #include"llist.h"
 // constructor
@@ -63,20 +63,22 @@ bool llist::isEmpty() {
 // PARAMETER: no parameters are need since is displaying the llist.
 void llist::displayAll() {
 
-
+    cout << "[Name]  [ID]  [Priority]  [Burst]" << endl;
+    cout << "-------------------------------"<< endl; 
     Node *temp = new Node;
     temp = Front;
     if (this -> isEmpty()) { // if empty print empty
         cout << "[ empty ]" << endl;
     } else {// end of if statement.
-        cout << "[ ";
+        //cout << "[ ";
         while (temp!=NULL) // go through the llist
         {
-            cout << temp -> Elem << " ";
+            cout << temp -> Elem.name << "\t" << temp -> Elem.id << "\t" << temp -> Elem.priority << "\t" << temp -> Elem.burst << "\t"<< endl;
             
             temp = temp -> Next;
         } // end of while loop
-        cout << " ]" << endl;
+        cout << endl;
+	//cout << " ]" << endl;
     }
 } // end of displayAll function
 
@@ -354,6 +356,53 @@ void llist::insertIth(int I, PCB newNum) {
     } // end of if statement
 
 } // end of insertIth function
+
+
+void llist::Sorting()
+{
+
+	Node *temp = new Node;
+        temp = Front;
+	this -> insertionSort(&temp);
+}
+
+
+
+void llist::insertionSort(Node **head)
+{
+	Node *sorted = NULL;
+	Node *current = *head;
+
+	while (current != NULL)
+	{
+		Node *temp = current -> Next;
+
+		this-> sortedInsert(&sorted, current);
+
+		current = temp;
+	}
+	*head = sorted;
+}
+
+void llist::sortedInsert(Node **head, Node *newTemp)
+{
+	Node *current = new Node;
+
+	if (*head == NULL || (*head)-> Elem.priority >= newTemp -> Elem.priority)
+	{
+		newTemp -> Next = *head;
+		*head = newTemp;
+	} else {
+		current = *head;
+		while (current -> Next != NULL && current -> Next -> Elem.priority < newTemp -> Elem.priority)
+		{
+			current = current -> Next;
+		}
+		newTemp -> Next = current -> Next;
+		current -> Next = newTemp;
+	}
+}
+
 
 
 // PURPOSE: Copy Constructor to allow pass by value and return by value

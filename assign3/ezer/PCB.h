@@ -9,21 +9,18 @@ using namespace std;
 
 class PCB
 {
- private:
-  int key;      // key
-  string firstName;  // customer first name
-  string lastName; // customer last name
-  string phone; // phone number
-  string username; // username
-  string password; // password
-  string jobtitle; // jobtitle
-  string jobtype; // jobtype
+ //private:
+ public:
+  string name;      // name process
+  int id; // id process
+  int priority; // priority process
+  int burst; // burst time
 
 
  public:
 
-  PCB();  // to create a blank el_t object
-  PCB(int, string, string, string, string, string, string, string); // to create an initialized el_t object
+  PCB();  // to create a blank PCB object
+  PCB(string name, int tid, int priority, int burst); // to create an initialized PCB object
 
   bool operator==(PCB);  // overload == for search
   bool operator!=(PCB);  // overload != for search
@@ -33,9 +30,9 @@ class PCB
   // operator != to the client refers that is not the same as the node element
 
   // this overloads cout for the el_t object
-  // This is a friend function since the receiver object is not el_t
+  // This is a friend function since the receiver object is not PCB
   friend ostream& operator<<(ostream&, const PCB&);
 
-  friend class htable;  // client of this class is htable which needs access to the key part of el_t
+  friend class schedule;  // client of this class is htable which needs access to the key part of PCB
 
 };

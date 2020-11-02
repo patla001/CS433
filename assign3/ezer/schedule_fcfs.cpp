@@ -43,9 +43,10 @@ int main(int argc, char *argv[])
 
     // Read task name, priority and burst length from the input file 
     string name;
+    int id = 1;
     int priority;
     int burst;
-
+    llist Q1; // initalize linked list queue
     // open the input file
     std::ifstream infile(argv[1]);
     string line;
@@ -63,13 +64,22 @@ int main(int argc, char *argv[])
         getline(ss, token, ',');
         burst = std::stoi(token);
         
-        cout << name << " " << priority << " " << burst << endl;
+        //cout << name << " " << priority << " " << burst << endl;
         // TODO: add the task to the scheduler's ready queue
         // You will need a data structure, i.e. PCB, to represent a task 
 	// e.g., void add(char *name, int priority, int burst)
+	//
+	
+	PCB X; // initialize object
+	//X = PCB("P1", 4, 1, 3);
+    	X = PCB(name,id,priority,burst); 
+    	
+	Q1.addRear(X);
+	id++;
     }
-
-
+     //Q1.displayAll();
+     Q1.Sorting();
+     Q1.displayAll();
     // TODO: Add your code to run the scheduler and print out statistics
 
     return 0;

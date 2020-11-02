@@ -8,14 +8,14 @@
 // blank element
 PCB::PCB()
 {
-  char name = "";
-  tid = -1;
+  string name;
+  id = -1;
   priority = -1;
   burst = -1;
 }
 
 // initializing constructor to create an el_t object
-PCB::PCB(char tname, int tid, int tpriority, int tburst)
+PCB::PCB(string tname, int tid, int tpriority, int tburst)
 {
   name = tname;
   id = tid;
@@ -27,18 +27,18 @@ PCB::PCB(char tname, int tid, int tpriority, int tburst)
 // overload == for search based on the key part only
 bool PCB::operator==(PCB OtherOne)
 {
-  if (key == OtherOne.key) return true; else return false;
+  if (id == OtherOne.id) return true; else return false;
 }
 
 // overload != for search based on the key part only
 bool PCB::operator!=(PCB OtherOne)
 {
-  if (key != OtherOne.key) return true; else return false;
+  if (id != OtherOne.id) return true; else return false;
 }
 
 // overload cout
 ostream& operator<<(ostream& os, const PCB& E)
 {
-  os << E.key << "+" << E.firstName;
+  os << E.name << "+" << E.id;
   return os;
 }
