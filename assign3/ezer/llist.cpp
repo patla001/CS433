@@ -65,8 +65,7 @@ void llist::displayAll() {
 
     cout << "[Name]  [ID]  [Priority]     [Burst]  [Turnaround Time]  [Waiting Time]" << endl;
     cout << "----------------------------------------------------------------------"<< endl; 
-    Node *temp = new Node;
-    temp = Front;
+    Node *temp = Front;
     if (this -> isEmpty()) { // if empty print empty
         cout << "[ empty ]" << endl;
     } else {// end of if statement.
@@ -107,11 +106,12 @@ void llist::addRear(PCB NewNum) {
     } else {
         // Regular
         // Uses temp to find the last node
-        while ( temp -> Next != NULL ) {
+       /* while ( temp -> Next != NULL ) {
             temp = temp -> Next;
         } // end of while loop
         // Appends the last node with last
-        Rear -> Next = temp;
+        */
+	Rear -> Next = temp;
         Rear = Rear -> Next;
         Count++;
 
@@ -462,6 +462,75 @@ float llist::avgwaitingTime()
 	avg = (double)sum /countTime;
 	return avg;
 }
+
+
+// Swap the Nodes
+Node* llist::swap(Node *ptr1, Node *ptr2)
+{
+	Node *tmp = ptr2 -> Next;
+	ptr2 -> Next = ptr1;
+	ptr1 -> Next = tmp;
+	return ptr2;
+}
+
+
+void llist::sort()
+{
+	Node *temp = Front;
+
+	int countList=0;	
+	if (this -> isEmpty()) { // if empty print empty
+             cout << "[ empty ]" << endl;
+         } else {// end of if statement.
+             //cout << "[ ";
+             while (temp!=NULL) // go through the llist
+             {
+		 countList++;    
+                 temp = temp -> Next;
+ 
+             } // end of while loop
+ 
+         }
+	
+	Node *tmp = Front;
+	bubbleSort(&tmp, countList);
+	 //Front(5) 3 4 1 8 7 2 6
+         //1 2 3 4 Front(5) 6 7 8
+	Front = tmp;
+}
+
+
+// Bubble Sort
+void llist::bubbleSort(Node **head, int count)
+{
+	Node **h;
+	int i, j, swapped;
+
+	for (i = 0; i<= count; i++)
+	{
+		h = head;
+		swapped = 0;
+
+		for (j = 0; j < count -i - 1; j++)
+		{
+			Node *p1 = *h;
+			Node *p2 = p1 -> Next;
+			if (p1 -> Elem > p2 -> Elem)
+			{
+				*h = swap(p1, p2);
+				swapped = 1;
+			}
+
+			h = &(*h) -> Next;
+		}
+
+		if (swapped == 0)
+		{
+			break;
+		}
+	}
+}
+
 
 
 
