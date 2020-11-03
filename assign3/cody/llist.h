@@ -21,6 +21,7 @@ class llist
 		llist();
 		~llist();
 		bool isEmpty();
+		void importData(llist&);
 		void displayAll();
 		void addFront(PCB);
 		void addRear(PCB);
@@ -30,12 +31,15 @@ class llist
 		void deleteIth(int, PCB&);
 		void insertIth(int, PCB);
 		void turnAroundTime();
+		void sortB();
+		void bubbleSortB(Node**, int);
+		void sortPrio();
+		void bubbleSortPrio(Node**, int);
+		int numNodes();
 		float avgTAT();
 		void waitingTime();
 		float avgWaitTime();
-		/*void MergeSortByBurst(Node**);
-		void FrontBackSplit(Node*, Node**, Node**);
-		Node* SortByBurst(Node*, Node *);*/
+		Node* swap(Node*, Node*);
 		llist(const llist&);
 		llist& operator=(const llist&);
 };

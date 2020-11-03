@@ -1,6 +1,8 @@
 #include "llist.h"
 #include <iostream>
 #include <iomanip>
+#include <fstream> 
+
 using namespace std;
 
 
@@ -32,6 +34,38 @@ bool llist::isEmpty()
 		return false;
 	}
 } 
+
+void llist::importData(llist &List1)
+{ 
+	string inputFile;
+	ifstream fin;
+	string name;
+	string line;
+	int id = 1;
+	int priority = 0;
+	int burst = 0;
+	int tat = 0;
+	int wt = 0;
+	//llist L1;
+
+	cout << "Please enter file name: ";
+	getline(cin, inputFile);
+	fin.open(inputFile.data());
+	if (fin)
+	{
+		while (fin >> name >> priority >> burst)
+		{
+			PCB X(name, id, priority, burst, tat, wt);
+			List1.addRear(X);
+			id++;
+		}
+	}
+	else
+	{
+		cout << "file not found" << endl;
+	}
+	fin.close();
+}
 
 void llist::displayAll()
 {
@@ -236,7 +270,11 @@ void llist::turnAroundTime()
 	{
 		while (P != NULL)
 		{
-			if (P->Elem.id == 1)
+			tatCurr = P->Elem.burst; 
+			tatCurr = tatPrev + tatCurr;
+			tatPrev = tatCurr;
+			P->Elem.TA_Time = tatCurr;
+			/*if (P->Elem.id == 1)
 			{
 				tatCurr = P->Elem.burst;
 				tatPrev = tatCurr;
@@ -248,7 +286,7 @@ void llist::turnAroundTime()
 				time = tatCurr + tatPrev;
 				tatPrev = time;
 				P->Elem.TA_Time = time;
-			}
+			}*/
 			P = P->Next;
 		}
 	}
@@ -283,7 +321,8 @@ void llist::waitingTime()
 {
 	Node *P;
 	P = Front; 
-	int TATime, WTime, Tburst;
+	int TATime, Tburst;
+	int WTime = 0;
 
 	if (isEmpty())
 	{
@@ -296,6 +335,7 @@ void llist::waitingTime()
 			Tburst = P->Elem.burst;
 			TATime = P->Elem.TA_Time;
 			WTime = TATime - Tburst;
+			//WTime += Tburst;
 			P->Elem.W_Time = WTime;
 			P = P->Next;
 		}
@@ -326,70 +366,6 @@ float llist::avgWaitTime()
 	avg = (double)sum / countTime;
 	return avg;
 }
-
-//void llist::MergeSortByBurst(Node** frontRef)
-//{
-//	Node *front = *frontRef;
-//	Node *P;
-//	Node *Q;
-//
-//	if ((front == NULL) || (front->Next == NULL))
-//	{
-//		return;
-//	}
-//	FrontBackSplit(front, &P, &Q);
-//	MergeSortByBurst(&P);
-//	MergeSortByBurst(&Q);
-//
-//	*frontRef = SortByBurst(P, Q);
-//}
-//
-//void llist::FrontBackSplit(Node* Original, Node** frontRef, Node** rearRef)
-//{
-//	Node *fast;
-//	Node *slow;
-//	slow = Original;
-//	fast = Original->Next; 
-//
-//	while (fast != NULL)
-//	{
-//		fast = fast->Next;
-//		if (fast != NULL)
-//		{
-//			slow = slow->Next;
-//			fast = fast->Next;
-//		}
-//	}
-//	*frontRef = Original;
-//	*rearRef = slow->Next;
-//	slow->Next = NULL;
-//}
-//
-//Node* llist::SortByBurst(Node* P, Node* Q)
-//{
-//	Node *result = NULL;
-//	if (P == NULL)	
-//	{
-//		return (Q);
-//	}
-//	else if (Q == NULL)
-//	{
-//		return (P); 
-//	}
-//
-//	if (P->Elem.burst <= Q->Elem.burst)
-//	{
-//		result = P;
-//		result->Next = SortByBurst(P->Next, Q);
-//	}
-//	else
-//	{
-//		result = Q;
-//		result->Next = SortByBurst(P, Q->Next);
-//	}
-//	return(result);
-//}
-
 
 llist::llist(const llist& Original)
 {
@@ -423,4 +399,118 @@ llist& llist::operator=(const llist& OtherOne)
 		}
 	}
 	return *this;
+}  
+
+int llist::numNodes()
+{
+	int length = 0;
+	Node *P = Front; 
+
+	while (P != NULL)
+	{
+		length++;
+		P = P->Next;
+	}
+	return length;
 } 
+
+Node* llist::swap(Node*A, Node*B)
+{
+	Node* temp = B->Next;
+	B->Next = A;
+	A->Next = temp;
+	return B;
+}
+
+void llist::sortB()
+{ 
+	Node* Temp = Front;
+	int length = numNodes(); 
+	bubbleSortB(&Temp, length);
+	Front = Temp;
+	/*int length = numNodes();
+	if (length > 1)
+	{
+		for (int i = 0; i < length-1; i++)
+		{
+			Node* current = Front;
+			Node* next = Front->Next;
+			for (int j = 0; j < length-1; j++)
+			{
+				if (current->Elem.burst > next->Elem.burst)
+				{
+					int temp = current->Elem.burst;
+					current->Elem.burst = next->Elem.burst;
+					next->Elem.burst = temp;
+				}
+				current = next;
+				next = next->Next;
+			}
+		}
+	}*/
+} 
+
+void llist::bubbleSortB(Node** top, int numNodes)
+{
+	Node **F;
+	int swapped;
+
+	for (int i = 0; i <= numNodes; i++)
+	{
+		F = top;
+		swapped = 0;
+
+		for (int j = 0; j < numNodes-1; j++)
+		{
+			Node *Ptr1 = *F;
+			Node *Ptr2 = Ptr1->Next;
+			if (Ptr1->Elem.burst > Ptr2->Elem.burst)
+			{
+				*F = swap(Ptr1, Ptr2);
+				swapped = 1;
+			}
+			F = &(*F)->Next;
+		}
+		if (swapped == 0)
+		{
+			break;
+		}
+	}
+} 
+
+void llist::sortPrio()
+{
+	Node* Temp = Front;
+	int length = numNodes();
+	bubbleSortPrio(&Temp, length);
+	Front = Temp;
+	
+}
+
+void llist::bubbleSortPrio(Node** top, int numNodes)
+{
+	Node **F;
+	int swapped;
+
+	for (int i = 0; i <= numNodes; i++)
+	{
+		F = top;
+		swapped = 0;
+
+		for (int j = 0; j < numNodes - 1; j++)
+		{
+			Node *Ptr1 = *F;
+			Node *Ptr2 = Ptr1->Next;
+			if (Ptr1->Elem.priority > Ptr2->Elem.priority)
+			{
+				*F = swap(Ptr1, Ptr2);
+				swapped = 1;
+			}
+			F = &(*F)->Next;
+		}
+		if (swapped == 0)
+		{
+			break;
+		}
+	}
+}

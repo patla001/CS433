@@ -1,4 +1,4 @@
-//linked list where each node is a PCB and the PCB contains the process ID/burst/arrival/priority
+//linked list where each node is a PCB and the PCB contains the process ID/burst/arrival/priority/tat/wt
 #include "llist.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	cout << "Description : read a text file and apply FCFS method" << std::endl;
 	cout << "====================================================" << std::endl;
 
-	string inputFile;
+	/*string inputFile;
 	ifstream fin; 
 	string name;
 	string line;
@@ -27,34 +27,54 @@ int main(int argc, char *argv[])
 	int priority = 0;
 	int burst = 0;
 	int tat = 0;
-	int wt = 0;
+	int wt = 0;*/
 	llist L1;
 	
-	cout << "Please enter file name: ";
+	/*cout << "Please enter file name: ";
 	getline(cin, inputFile);
 	fin.open(inputFile.data());
 	if (fin)
 	{
-		cout << "success" << endl;
 		while (fin >> name >> priority >> burst)
 		{ 
 			PCB X(name,id,priority,burst, tat, wt);
-			L1.addRear(X);
+			L1.addRear(X); 
 			id++;
 		}
 	} 
 	else
 	{
 		cout << "file not found" << endl;
-	}
-	//L1.displayAll();
+	}*/
+	
+	L1.importData(L1); 
+	
 	L1.turnAroundTime();
-	float avgtat = L1.avgTAT();
+	float fcfsavgtat = L1.avgTAT();
 	L1.waitingTime();
-	float avgwait = L1.avgWaitTime();
+	float fcfsavgwait = L1.avgWaitTime();
 	L1.displayAll();
-	cout << "Average Turnaround Time is: " << avgtat << endl;
-	cout << "Average Wait Time is: " << avgwait << endl;
-	fin.close();
+	cout << "Average Turnaround Time for FCFS is: " << fcfsavgtat << endl;
+	cout << "Average Wait Time for FCFS is: " << fcfsavgwait << endl << endl;
+	
+	L1.sortB();
+	L1.turnAroundTime();
+	float SJFavgtat = L1.avgTAT();
+	L1.waitingTime();
+	float SJFavgwait = L1.avgWaitTime();
+	L1.displayAll();
+	cout << "Average Turnaround Time for SJF is: " << SJFavgtat << endl;
+	cout << "Average Wait Time for SJF is: " << SJFavgwait << endl << endl;
+
+	L1.sortPrio();
+	L1.turnAroundTime();
+	float PrioAvgTAT = L1.avgTAT();
+	L1.waitingTime();
+	float PrioAvgWait = L1.avgWaitTime();
+	L1.displayAll();
+	cout << "Average Turnaround Time for priority scheduling  is: " << PrioAvgTAT << endl;
+	cout << "Average Wait Time for priority scheduling is: " << PrioAvgWait << endl << endl;
+
+	//fin.close(); 
 	return 0;
 }
