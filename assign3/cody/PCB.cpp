@@ -1,44 +1,64 @@
-// CS311 Yoshii - el_t for HW8 Hash Table
-// Element type of a list node is defined here
-// el_t can be changed by the client to fit its needs
-//----------------------------------------------------
-
 #include "PCB.h"
+#include <iostream>
+#include <string>
+using namespace std; 
 
-// blank element
 PCB::PCB()
 {
-  char name = "";
-  tid = -1;
-  priority = -1;
-  burst = -1;
-}
+	name = "";
+	id = -1;
+	priority = -1;
+	burst = -1;
+	TA_Time = -1;
+	W_Time = -1;
+} 
 
-// initializing constructor to create an el_t object
-PCB::PCB(char tname, int tid, int tpriority, int tburst)
+PCB::PCB(string procName, int procID, int procPriority, int CPUburst, int tat, int wt)
 {
-  name = tname;
-  id = tid;
-  priority = tpriority;
-  burst = tburst;
+	name = procName;
+	id = procID;
+	priority = procPriority;
+	burst = CPUburst;
+	TA_Time = tat;
+	W_Time = wt;
+} 
 
-}
-
-// overload == for search based on the key part only
 bool PCB::operator==(PCB OtherOne)
 {
-  if (key == OtherOne.key) return true; else return false;
-}
+	if (id == OtherOne.id) return true;
+	else return false;
+} 
 
-// overload != for search based on the key part only
 bool PCB::operator!=(PCB OtherOne)
 {
-  if (key != OtherOne.key) return true; else return false;
+	if (id != OtherOne.id) return true;
+	else return false;
+} 
+
+bool PCB::operator>=(PCB OtherOne)
+{
+	if (priority >= OtherOne.priority) return true; else return false;
+	//	return priority >= OtherOne.priority;
 }
 
-// overload cout
+bool PCB::operator>(PCB OtherOne)
+{
+	if (priority > OtherOne.priority) return true; else return false;
+	//return priority < OtherOne.priority;
+}
+
+bool PCB::operator<=(PCB OtherOne)
+{
+	if (priority <= OtherOne.priority) return true; else return false;
+}
+
+bool PCB::operator<(PCB OtherOne)
+{
+	if (priority < OtherOne.priority) return true; else return false;
+}
+
 ostream& operator<<(ostream& os, const PCB& E)
 {
-  os << E.key << "+" << E.firstName;
-  return os;
+	os << E.name << "+" << E.id << "+" << E.priority << "+" << E.burst;
+	return os;
 }
