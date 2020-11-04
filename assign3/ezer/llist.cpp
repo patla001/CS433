@@ -363,7 +363,8 @@ void llist::insertIth(int I, PCB newNum) {
 void llist::turnaroundTime()
 {
       Node *temp = new Node;
-      int ttcurr, ttprev, time;
+      //int ttcurr, ttprev, time;
+      int sum = 0;
       temp = Front;
       if (this -> isEmpty()) { // if empty print empty
           cout << "[ empty ]" << endl;
@@ -371,7 +372,7 @@ void llist::turnaroundTime()
           //cout << "[ ";
           while (temp!=NULL) // go through the llist
           {
-	      if (temp-> Elem.id == 1)
+	     /* if (temp-> Elem.id == 1)
 	      {
 		      ttcurr = temp -> Elem.burst;
 		      ttprev = ttcurr;
@@ -381,7 +382,10 @@ void llist::turnaroundTime()
 		      time = ttcurr + ttprev;
 		      ttprev = time;
 		      temp -> Elem.tatime = time;
-	      }	      
+	      }	*/
+
+	      sum += temp -> Elem.burst;
+    	      temp -> Elem.tatime = sum;	      
 
               temp = temp -> Next;
 	      
@@ -474,7 +478,7 @@ Node* llist::swap(Node *ptr1, Node *ptr2)
 }
 
 
-void llist::sort()
+void llist::sort(string nameType)
 {
 	Node *temp = Front;
 
@@ -493,7 +497,7 @@ void llist::sort()
          }
 	
 	Node *tmp = Front;
-	bubbleSort(&tmp, countList);
+	bubbleSort(&tmp, countList, nameType);
 	 //Front(5) 3 4 1 8 7 2 6
          //1 2 3 4 Front(5) 6 7 8
 	Front = tmp;
@@ -501,11 +505,11 @@ void llist::sort()
 
 
 // Bubble Sort
-void llist::bubbleSort(Node **head, int count)
+void llist::bubbleSort(Node **head, int count, string nameType)
 {
+
 	Node **h;
 	int i, j, swapped;
-
 	for (i = 0; i<= count; i++)
 	{
 		h = head;
@@ -513,12 +517,30 @@ void llist::bubbleSort(Node **head, int count)
 
 		for (j = 0; j < count -i - 1; j++)
 		{
+				
 			Node *p1 = *h;
 			Node *p2 = p1 -> Next;
-			if (p1 -> Elem > p2 -> Elem)
+			if (nameType == "burst")
 			{
-				*h = swap(p1, p2);
-				swapped = 1;
+				if (p1 -> Elem.burst > p2 -> Elem.burst)
+				{
+					*h = swap(p1, p2);
+					swapped = 1;
+				}
+			} else if (nameType == "priority")
+			{
+				if (p1 -> Elem.priority < p2 -> Elem.priority)
+				{
+					*h = swap(p1,p2);
+					swapped = 1;
+				}
+			} else if (nameType == "id")
+			{
+				if (p1 -> Elem.id > p2 -> Elem.id)
+				{
+					*h = swap(p1,p2);
+					swapped = 1;
+				}
 			}
 
 			h = &(*h) -> Next;

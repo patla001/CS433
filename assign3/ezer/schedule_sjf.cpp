@@ -79,15 +79,16 @@ int main(int argc, char *argv[])
 	Q1.addRear(X);
 	id++;
     }
-     Q1.sort();
+     string nameType = "burst";
+     Q1.sort(nameType);
      Q1.turnaroundTime();
-     //float avgtt = Q1.avgturningTime();
-     //Q1.waitingTime();
-     //float avgwtime = Q1.avgwaitingTime();
+     float avgtt = Q1.avgturningTime();
+     Q1.waitingTime();
+     float avgwtime = Q1.avgwaitingTime();
      Q1.displayAll();
  
-     //cout << "Average Turnaround Time: " << avgtt << endl;
-     //cout << "Average Waiting Time: " << avgwtime << endl;
+     cout << "Average Turnaround Time: " << avgtt << endl;
+     cout << "Average Waiting Time: " << avgwtime << endl;
 	
     // TODO: Add your code to run the scheduler and print out statistics
 

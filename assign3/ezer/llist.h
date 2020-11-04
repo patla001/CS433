@@ -113,8 +113,8 @@ protected:
   void waitingTime();
   float avgwaitingTime();
   Node* swap(Node *ptr1, Node *ptr2);
-  void bubbleSort(Node **head, int count);
-  void sort();
+  void bubbleSort(Node **head, int count, string nameType);
+  void sort(string nameType);
   //Copy Constructor to allow pass by value and return by value
   llist(const llist&);
 

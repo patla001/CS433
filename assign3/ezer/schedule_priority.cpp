@@ -15,6 +15,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 #include "llist.h"
 
 
@@ -79,14 +80,19 @@ int main(int argc, char *argv[])
 	Q1.addRear(X);
 	id++;
     }
+    std::vector<std::string> nameType = {"priority", "id"};
+     Q1.sort(nameType[0]);
      Q1.turnaroundTime();
-     //float avgtt = Q1.avgturningTime();
-     //Q1.waitingTime();
-     //float avgwtime = Q1.avgwaitingTime();
+     Q1.displayAll();
+     Q1.sort(nameType[1]);
+
+     float avgtt = Q1.avgturningTime();
+     Q1.waitingTime();
+     float avgwtime = Q1.avgwaitingTime();
      Q1.displayAll();
 
-     //cout << "Average Turnaround Time: " << avgtt << endl;
-     //cout << "Average Waiting Time: " << avgwtime << endl;
+     cout << "Average Turnaround Time: " << avgtt << endl;
+     cout << "Average Waiting Time: " << avgwtime << endl;
     // TODO: Add your code to run the scheduler and print out statistics
 
     return 0;
