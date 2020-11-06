@@ -15,7 +15,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <vector>
 #include "llist.h"
 
 
@@ -32,7 +31,7 @@ int main(int argc, char *argv[])
     
     int QUANTUM = 10;
     // Check that input file is provided at command line
-    if(argc < 2 ) {
+/*    if(argc < 2 ) {
         cerr << "Usage: " << argv[0] << " <input_file> [<time_quantum>]" << endl;
         exit(1);
     }
@@ -41,7 +40,7 @@ int main(int argc, char *argv[])
     if(argc >= 3) {
         QUANTUM = atoi(argv[2]);
     }
-
+*/
     // Read task name, priority and burst length from the input file 
     string name;
     int id = 1;
@@ -75,23 +74,22 @@ int main(int argc, char *argv[])
 	
 	PCB X; // initialize object
 	//X = PCB("P1", 4, 1, 3);
-    	X = PCB(name,id,priority,burst,tt,wtime,-1); 
+    	X = PCB(name,id,priority,burst,tt,wtime,burst); 
     	
 	Q1.addRear(X);
 	id++;
     }
-    std::vector<std::string> nameType = {"priority", "id"};
-     Q1.sort(nameType[0]);
-     Q1.turnaroundTime();
-     Q1.sort(nameType[1]);
-
-     float avgtt = Q1.avgturningTime();
-     Q1.waitingTime();
-     float avgwtime = Q1.avgwaitingTime();
+     Q1.rrWaitingTime(QUANTUM);
+     //Q1.makeDoublyLinkedList();
+     //int numberOfNodes = Q1.nodeCount();
+     //Q1.rrImplementation();
+     //Q1.rrTurnAroundTime(); 
+     //float avgtt = Q1.avgturningTime();
+     //float avgwtime = Q1.avgwaitingTime();
      Q1.displayAll();
 
-     cout << "Average Turnaround Time: " << avgtt << endl;
-     cout << "Average Waiting Time: " << avgwtime << endl;
+     //cout << "Average Turnaround Time: " << avgtt << endl;
+     //cout << "Average Waiting Time: " << avgwtime << endl;
     // TODO: Add your code to run the scheduler and print out statistics
 
     return 0;

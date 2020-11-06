@@ -14,10 +14,11 @@ PCB::PCB()
   burst = -1;
   tatime = -1;
   wtime = -1;
+  remainder = -1;
 }
 
 // initializing constructor to create an el_t object
-PCB::PCB(string tname, int tid, int tpriority, int tburst, int ttatime, int twtime)
+PCB::PCB(string tname, int tid, int tpriority, int tburst, int ttatime, int twtime, int tremainder)
 {
   name = tname;
   id = tid;
@@ -25,6 +26,7 @@ PCB::PCB(string tname, int tid, int tpriority, int tburst, int ttatime, int twti
   burst = tburst;
   tatime = ttatime;
   wtime = twtime;
+  remainder = tremainder;
 
 }
 

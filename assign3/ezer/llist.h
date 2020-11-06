@@ -115,6 +115,13 @@ protected:
   Node* swap(Node *ptr1, Node *ptr2);
   void bubbleSort(Node **head, int count, string nameType);
   void sort(string nameType);
+  void rrWaitingTime(int quantum);
+  void rrTurnAroundTime();
+  void makeDoublyLinkedList();
+  int nodeCount();
+  int checkForZeros();
+  void rrImplementation();
+  Node* findTail();
   //Copy Constructor to allow pass by value and return by value
   llist(const llist&);
 

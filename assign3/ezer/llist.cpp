@@ -554,6 +554,200 @@ void llist::bubbleSort(Node **head, int count, string nameType)
 }
 
 
+void llist::rrWaitingTime(int quantum)
+{
+	// Current time
+	int t = 0; 
+	Node *temp = Front;
+        //int burst = 0;
+	int count = 0;	
+	//while (true)
+	//{
+	//	bool done = true;
+		//for (Node *temp=Front; temp!=NULL; temp=temp-> Next)
+		while(temp!=NULL)
+		{
+			bool done = true;
+			if ( temp -> Elem.burst > 0)
+			{
+				done = false;
+
+				if ( temp -> Elem.burst > quantum)
+				{
+					t += quantum;
+					//int remain_burst = temp -> Elem.burst; 
+					//temp -> Elem.remainder = remain_burst - quantum;
+					temp -> Elem.remainder -= quantum;
+				} else {
+					t = t + temp -> Elem.remainder;
+				
+					//burst = temp -> Elem.burst;
+					//temp -> Elem.wtime = t -  burst;
+					temp -> Elem.wtime = t - temp -> Elem.burst;
+					temp -> Elem.remainder = 0;
+
+				}
+			}
+			temp = temp -> Next;
+
+			if (done == true)
+			{
+				break;
+			}
+		}
+		temp -> Next = Front;
+		count++;
+		cout << "count infity: " << count << endl;
+		
+		//if (done == true)
+	//	{
+	//		break;
+	//	}
+	//}
+
+
+}
+
+
+void llist::rrTurnAroundTime()
+{
+	Node *temp = Front;
+
+	if (this -> isEmpty()) { // if empty print empty
+              cout << "[ empty ]" << endl;
+        } else {// end of if statement.
+              while (temp!=NULL) // go through the llist
+              {
+		      temp -> Elem.tatime = temp-> Elem.burst + temp -> Elem.wtime;
+		      temp = temp -> Next;
+
+              } // end of while loop
+
+        }
+
+
+
+}
+
+
+
+Node* llist::findTail()
+{
+	Node *temp = Front;
+	while (temp -> Next != NULL)
+	{
+		temp = temp -> Next;
+	}
+
+	return temp;
+}
+
+
+void llist::makeDoublyLinkedList()
+{
+	//Node *tail = findTail();
+	//*tail - > Next = Front;
+	
+	Node *temp = Front;
+	while (temp -> Next != NULL)
+	{
+		temp = temp -> Next;
+	}
+
+	temp -> Next = Front;
+	
+	
+}
+
+
+int llist::nodeCount() 
+{
+	int nodeCount;
+	Node *current = Front;
+	if (Front != NULL)
+	{
+		nodeCount = 1;
+	} else {
+		nodeCount = 0;
+	}
+
+	while(current -> Next != Front)	
+	{
+		nodeCount += 1;
+		current = current -> Next;
+	} // end while
+	return nodeCount;
+} // end nodeCount
+
+
+
+int llist::checkForZeros()
+{
+	int nodeCount;
+
+	Node *temp = Front;
+
+	if (Front != NULL)
+	{
+		nodeCount = 1;
+	} else {
+		nodeCount = 0;
+	}
+
+	while (temp -> Next != Front)
+	{
+		nodeCount += 1;
+		temp=temp -> Next;
+	}
+
+
+	int zeroCount = 0;
+	int iterationCount = 0;
+	bool isRunning = true;
+	Node *current = Front;
+
+
+	while(isRunning)
+	{
+		if (current ->  Elem.burst == 0) 
+		{
+			zeroCount += 1;
+		} // end of if
+		iterationCount += 1;
+		if (zeroCount == nodeCount || iterationCount == nodeCount) 
+		{
+			isRunning = false;
+		} // end if
+		current = current -> Next;
+	} // end while
+	return zeroCount;
+} // end checkForZeros
+
+
+
+
+void llist::rrImplementation()
+{
+	Node *current = Front;
+	int timeQuantum = 10;
+	int numOfZeros = 0;
+	int numOfProcesses = nodeCount();
+	while (numOfZeros < numOfProcesses) 
+	{
+		numOfZeros = 0;
+		if (current -> Elem.burst <= timeQuantum )
+		{
+			current -> Elem.burst = 0;
+		} else if (current ->  Elem.burst > timeQuantum) 
+		{
+			current -> Elem.burst -= timeQuantum;
+
+		}
+		numOfZeros = checkForZeros();
+		current = current -> Next;
+	}
+}
+
 
 
 
