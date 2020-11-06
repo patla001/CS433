@@ -556,58 +556,38 @@ void llist::bubbleSort(Node **head, int count, string nameType)
 
 void llist::rrWaitingTime(int quantum)
 {
-	// Current time
-	int t = 0; 
-	Node *temp = Front;
-        //int burst = 0;
-	int count = 0;	
-	//while (true)
-	//{
-	//	bool done = true;
-		//for (Node *temp=Front; temp!=NULL; temp=temp-> Next)
-		while(temp!=NULL)
-		{
-			bool done = true;
-			if ( temp -> Elem.burst > 0)
-			{
-				done = false;
+         // Current time
+         int t = 0;
+         while (true)
+	 {
+                 bool done = true;
+                 for (Node *temp=Front; temp!=NULL; temp=temp-> Next)
+                 {
+                         if ( temp -> Elem.remainder > 0)
+                         {
+                                 done = false;
 
-				if ( temp -> Elem.burst > quantum)
-				{
-					t += quantum;
-					//int remain_burst = temp -> Elem.burst; 
-					//temp -> Elem.remainder = remain_burst - quantum;
-					temp -> Elem.remainder -= quantum;
-				} else {
-					t = t + temp -> Elem.remainder;
-				
-					//burst = temp -> Elem.burst;
-					//temp -> Elem.wtime = t -  burst;
-					temp -> Elem.wtime = t - temp -> Elem.burst;
-					temp -> Elem.remainder = 0;
+                                 if ( temp -> Elem.remainder > quantum)
+                                 {
+					 t += quantum;
+                                         temp -> Elem.remainder -= quantum;
+                                 } else {
+                                         t = t + temp -> Elem.remainder;
+                                         temp -> Elem.wtime = t - temp -> Elem.burst;
+					 temp -> Elem.remainder = 0;
 
-				}
-			}
-			temp = temp -> Next;
+                                 }
+                         }
+                 }
 
-			if (done == true)
-			{
-				break;
-			}
-		}
-		temp -> Next = Front;
-		count++;
-		cout << "count infity: " << count << endl;
-		
-		//if (done == true)
-	//	{
-	//		break;
-	//	}
-	//}
+                 if (done == true)
+                 {
+                         break;
+                 }
+         } 
 
 
 }
-
 
 void llist::rrTurnAroundTime()
 {

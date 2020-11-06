@@ -20,28 +20,8 @@
 
 using namespace std;
 
-int main(int argc, char *argv[])
+void runRR(string filename, int QUANTUM)
 {
-    std::cout << "CS 433 Programming assignment 3" << std::endl;
-    std::cout << "Author: Ezer Patlan and Cody Chadler" << std::endl;
-    std::cout << "Date: 11/04/2020" << std::endl;
-    std::cout << "Course: CS433 (Operating Systems)" << std::endl;
-    std::cout << "Description : read a text file and apply FCFS method" << std::endl;
-    std::cout << "=================================" << std::endl;
-    
-    int QUANTUM = 10;
-    // Check that input file is provided at command line
-/*    if(argc < 2 ) {
-        cerr << "Usage: " << argv[0] << " <input_file> [<time_quantum>]" << endl;
-        exit(1);
-    }
-
-    // Read the time quantum if provided.
-    if(argc >= 3) {
-        QUANTUM = atoi(argv[2]);
-    }
-*/
-    // Read task name, priority and burst length from the input file 
     string name;
     int id = 1;
     int priority;
@@ -50,7 +30,7 @@ int main(int argc, char *argv[])
     int wtime = 0;
     llist Q1; // initalize linked list queue
     // open the input file
-    std::ifstream infile(argv[1]);
+    std::ifstream infile(filename);
     string line;
     while(getline(infile, line) ) {
         std::istringstream ss (line);
@@ -80,16 +60,40 @@ int main(int argc, char *argv[])
 	id++;
     }
      Q1.rrWaitingTime(QUANTUM);
-     //Q1.makeDoublyLinkedList();
-     //int numberOfNodes = Q1.nodeCount();
-     //Q1.rrImplementation();
-     //Q1.rrTurnAroundTime(); 
-     //float avgtt = Q1.avgturningTime();
-     //float avgwtime = Q1.avgwaitingTime();
+     Q1.rrTurnAroundTime(); 
+     float avgtt = Q1.avgturningTime();
+     float avgwtime = Q1.avgwaitingTime();
      Q1.displayAll();
 
-     //cout << "Average Turnaround Time: " << avgtt << endl;
-     //cout << "Average Waiting Time: " << avgwtime << endl;
+     cout << "Average Turnaround Time: " << avgtt << endl;
+     cout << "Average Waiting Time: " << avgwtime << endl;
+}
+
+
+int main(int argc, char *argv[])
+{
+    std::cout << "CS 433 Programming assignment 3" << std::endl;
+    std::cout << "Author: Ezer Patlan and Cody Chadler" << std::endl;
+    std::cout << "Date: 11/04/2020" << std::endl;
+    std::cout << "Course: CS433 (Operating Systems)" << std::endl;
+    std::cout << "Description : read a text file and apply FCFS method" << std::endl;
+    std::cout << "=================================" << std::endl;
+    
+    int QUANTUM = 10;
+    // Check that input file is provided at command line
+   /* if(argc < 2 ) {
+        cerr << "Usage: " << argv[0] << " <input_file> [<time_quantum>]" << endl;
+        exit(1);
+    }*/
+
+    // Read the time quantum if provided.
+    if(argc >= 3) {
+	string filename = argv[1];
+        QUANTUM = atoi(argv[2]);
+	runRR(filename, QUANTUM);
+    }
+
+    // Read task name, priority and burst length from the input file 
     // TODO: Add your code to run the scheduler and print out statistics
 
     return 0;
