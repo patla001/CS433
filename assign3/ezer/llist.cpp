@@ -1,25 +1,3 @@
-//CS311 Yoshii Linked List class
-//INSTRUCTION:
-//Must use the provided HW3P1_help.doc to create llist.cpp
-//It helps to first create if-then-else structure to fill in later.
-//- Make sure PURPOSE and PARAMETER comments are given in detail
-//- Make sure all if-then-else are commented describing which case it is
-//- Make sure all local variables are described fully with their purposes
-//EMACS HINT:
-//  You can copy from a Word document to emacs (contrl-right click)
-//  control-K cuts and control-Y pastes
-//  Esc x replace-str does string replacements
-//  Esc > goes to the end of the file; Esc < to the beginning
-//  Tab on each line will indent perfectly for C++
-
-// ====================================================
-//HW#: HW3P1 llist
-//Your name: Ezer Patlan
-//Complier:  g++
-//File type: llist.cpp implementation file
-//=====================================================
-
-//using namespace std;
 #include<iostream>
 #include<cmath>
 #include"llist.h"
@@ -37,10 +15,7 @@ llist::llist() {
 } // end of constructor function.
 //destructor
 // PURPOSE: while the list is not empty, call deleteFront repeatedly to delete all nodes.
-//   Please place a cout as the first line of this function. “calling the llist destructor”
-//   We will need it in preparation for HW3P2.
 llist::~llist() {
-    //cout << "calling the llist destructor" << endl;
     PCB x;
     while(! this-> isEmpty() ) { // make the list empty
         this-> deleteFront(x);
@@ -60,7 +35,6 @@ bool llist::isEmpty() {
 } // end of isEmpty function
 
 // PURPOSE: display each element of the list starting from Front, enclosed in [] followed by endl.
-// special case: if the list is empty, display [empty].
 // PARAMETER: no parameters are need since is displaying the llist.
 void llist::displayAll() {
 
@@ -107,11 +81,6 @@ void llist::addRear(PCB NewNum) {
     } else {
         // Regular
         // Uses temp to find the last node
-       /* while ( temp -> Next != NULL ) {
-            temp = temp -> Next;
-        } // end of while loop
-        // Appends the last node with last
-        */
 	Rear -> Next = temp;
         Rear = Rear -> Next;
         Count++;

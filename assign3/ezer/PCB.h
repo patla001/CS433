@@ -25,14 +25,6 @@ class PCB
   bool operator>(PCB);   // overload <= for sorting
   bool operator<(PCB);   // overload < for sorting 
   bool operator<=(PCB); // overload <= for sorting
-  // In search == is used to compare node elements
-  // but what does it mean for this client to compare
-  // node elements?
-  // operator != to the client refers that is not the same as the node element
-
-  // this overloads cout for the PCB object
-  // This is a friend function since the receiver object is not PCB
-//  friend ostream& operator<<(ostream&, const PCB&);
 
 
 };

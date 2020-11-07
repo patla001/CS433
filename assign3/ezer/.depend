@@ -1,0 +1,7 @@
+schedule_fcfs.o: schedule_fcfs.cpp llist.h PCB.h
+schedule_sjf.o: schedule_sjf.cpp llist.h PCB.h
+schedule_priority.o: schedule_priority.cpp llist.h PCB.h
+schedule_rr.o: schedule_rr.cpp llist.h PCB.h
+schedule_priorityRR.o: schedule_priorityRR.cpp llist.h PCB.h
+PCB.o: PCB.cpp PCB.h
+llist.o: llist.cpp llist.h PCB.h
