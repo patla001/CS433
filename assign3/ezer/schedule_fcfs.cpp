@@ -24,23 +24,17 @@ int main(int argc, char *argv[])
 {
     std::cout << "CS 433 Programming assignment 3" << std::endl;
     std::cout << "Author: Ezer Patlan and Cody Chadler" << std::endl;
-    std::cout << "Date: 11/04/2020" << std::endl;
+    std::cout << "Date: 11/06/2020" << std::endl;
     std::cout << "Course: CS433 (Operating Systems)" << std::endl;
     std::cout << "Description : read a text file and apply FCFS method" << std::endl;
-    std::cout << "=================================" << std::endl;
+    std::cout << "=======================================================" << std::endl;
     
-    int QUANTUM = 10;
     // Check that input file is provided at command line
     if(argc < 2 ) {
         cerr << "Usage: " << argv[0] << " <input_file> [<time_quantum>]" << endl;
         exit(1);
     }
-
-    // Read the time quantum if provided.
-    if(argc >= 3) {
-        QUANTUM = atoi(argv[2]);
-    }
-
+    std::cout << "///////////////Input Table/////////////////////////////" << std::endl;
     // Read task name, priority and burst length from the input file 
     string name;
     int id = 1;
@@ -66,28 +60,41 @@ int main(int argc, char *argv[])
         getline(ss, token, ',');
         burst = std::stoi(token);
         
-        //cout << name << " " << priority << " " << burst << endl;
-        // TODO: add the task to the scheduler's ready queue
-        // You will need a data structure, i.e. PCB, to represent a task 
-	// e.g., void add(char *name, int priority, int burst)
-	//
+       cout << name << " " << priority << " " << burst << endl;
 	
 	PCB X; // initialize object
-	//X = PCB("P1", 4, 1, 3);
-    	X = PCB(name,id,priority,burst,tt,wtime); 
-    	
+	// add the input to the object
+    	X = PCB(name,id,priority,burst,tt,wtime,-1);
+        // stores the object in the back of the linked list	
 	Q1.addRear(X);
+	// increments the number of linked list been added.
 	id++;
     }
+    std::cout << "/////////////////////////////////////////////////////" << std::endl;
+     // calculate the turnaround time
      Q1.turnaroundTime();
-     //float avgtt = Q1.avgturningTime();
-     //Q1.waitingTime();
-     //float avgwtime = Q1.avgwaitingTime();
+     // calculate the average and standard deviation
+     // for the turnaround time
+     float avgtt = Q1.avgturningTime();
+     float stdtt = Q1.stdturningTime();
+     // calculate the waiting time
+     Q1.waitingTime();
+     // calculate the average and standard deviation
+     // for the waiting time
+     float avgwtime = Q1.avgwaitingTime();
+     float stdwtime = Q1.stdwaitingTime();
+     std::cout << "=======================================================" << std::endl;
+     // display the table
      Q1.displayAll();
 
-     //cout << "Average Turnaround Time: " << avgtt << endl;
-     //cout << "Average Waiting Time: " << avgwtime << endl;
-    // TODO: Add your code to run the scheduler and print out statistics
+     // print the statistical analysis
+     cout <<"--------------- Statistics -------------------------" << endl;
+     cout <<"----------------------------------------------------"<< endl; 
+     cout << "Average Turnaround Time for FCFS: " << avgtt << endl;
+     cout << "Turnaround Time standard deviation: +/- " << stdtt << endl;
+     cout <<"----------------------------------------------------"<< endl;
+     cout << "Average Waiting Time for FCFS: " << avgwtime << endl;
+     cout << "Waiting Time standard deviation: +/- " << stdwtime << endl;
 
     return 0;
-}
+} // end of the FCFS main program

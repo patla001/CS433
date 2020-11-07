@@ -17,7 +17,7 @@ PCB::PCB()
   remainder = -1;
 }
 
-// initializing constructor to create an el_t object
+// initializing constructor to create an PCB object
 PCB::PCB(string tname, int tid, int tpriority, int tburst, int ttatime, int twtime, int tremainder)
 {
   name = tname;
@@ -41,32 +41,27 @@ bool PCB::operator!=(PCB OtherOne)
 {
   if (id != OtherOne.id) return true; else return false;
 }
-
+// overload >= for the algorithm
 bool PCB::operator>=(PCB OtherOne)
 {
    if (priority >= OtherOne.priority) return true; else return false;
-//	return priority >= OtherOne.priority;
 }
 
+// overload > for the algorithm
 bool PCB::operator>(PCB OtherOne)
 {
    if (priority > OtherOne.priority) return true; else return false;	
-	//return priority < OtherOne.priority;
 }
 
+// overload <= for the algorithm
 bool PCB::operator<=(PCB OtherOne)
 {
 	 if (priority <= OtherOne.priority) return true; else return false;
 }
 
+// overload < for the algorithm
 bool PCB::operator<(PCB OtherOne)
 {
 	if (priority < OtherOne.priority) return true; else return false;
 }
 
-// overload cout
-ostream& operator<<(ostream& os, const PCB& E)
-{
-  os << E.name << "+" << E.id;
-  return os;
-}

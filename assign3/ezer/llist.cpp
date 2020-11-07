@@ -21,6 +21,7 @@
 
 //using namespace std;
 #include<iostream>
+#include<cmath>
 #include"llist.h"
 // constructor
 // PURPOSE: initialize Front and Rear to be NULL and Count = 0.
@@ -117,34 +118,6 @@ void llist::addRear(PCB NewNum) {
 
     } // end of if statement.
 } // end of addRear function.
-// PURPOSE:
-// special case: if this is going to be the very first node, you must
-// 	           create a new node and make Front and Rear point to it. Put NewNum in the Elem field
-//    	          of this new node. Count is updated.
-// regular case:  add a new node at the front and puts NewNum in the Elem field
-//    		 of this new node. Count is updated.
-//
-// PARAMETER: integer NewNum is needed to incorporated into the llist.
-void llist::addFront(PCB NewNum) {
-
-        Node *temp = new Node;
-        temp -> Elem = NewNum;
-        temp -> Next = NULL;
-        if (Front  == NULL) { // if first node
-            // Special
-            Front = temp;
-            Rear = temp;
-            Front -> Next = NULL;
-            Count++;
-        } else if (Front!=NULL){
-            // Regular
-            Node *temp = new Node;
-            temp -> Elem = NewNum;
-            temp -> Next = Front;
-            Front = temp;
-            Count++;
-        } // end of if statement.
-} // end of addFront function.
 
 // PURPOSE: error case: if the List is empty, throw an exception.
 //
@@ -234,168 +207,40 @@ void llist::deleteRear(PCB& OldNum) {
 
 
 
-// PURPOSE: Error case: If I is an illegal value (i.e. > Count or < 1) throw an exception.
-//
-// Special case: this should simply call deleteFront (I=1) or deleteRear (I==Count)
-// for some cases.
-//
-// Regular case: will delete the Ith node (I starts out at 1). Count is updated.
-// Note that if you go to the I-1th node, and also place another pointer on
-// the I+1th node, you can bypass the Ith node. Draw pictures first.
-// PARAMETER: int I represents the numerical index node and OldNum is integer represents
-// the previous node index.
-void llist::deleteIth(int I, PCB& OldNum) {
 
-    Node *temp = new Node;
-    temp -> Elem = OldNum;
-
-    Node *previous = new Node;
-    Node *current = new Node;
-
-    current = Front;
-    if (Front != NULL) {
-        int i = 1;
-        while (current -> Next != NULL && i <= I-1) { // go through the llist
-
-            previous = current; // store the node
-            current = current -> Next;
-            i++;
-        } // end of while loop
-        if (I == 1) { // delete the first llist
-            this-> deleteFront(OldNum);
-        } else if (current -> Next == NULL && I == Count ) { // delete the last llist
-            this -> deleteRear(OldNum);
-        }
-        else if (I > Count || I < 1){ // out of range from the llist
-            throw OutOfRange();
-        } else {
-
-            OldNum = current -> Elem;
-            previous -> Next = current -> Next;
-            delete current;
-            current = previous;
-
-            Count--;
-        } // end of if statement
-    } else { // if Front is NULL
-
-        if( I > Count || I < 1 ){ // out of range from the llist
-            throw OutOfRange();
-        } else if( I == 1) { // delete the beginning of llist
-            this -> deleteFront(OldNum);
-        } else if( current -> Next == NULL && I == Count) {
-            this -> deleteRear(OldNum); // delete the last of llist
-        } else { // make the list empty
-            OldNum = Front -> Elem;
-            Node *Second;
-            Second = Front -> Next;
-            delete Front;
-            Front = Second;
-            Front = NULL;
-            Rear = NULL;
-            Count--;
-        } // end of if statement
-
-
-    } // end of if statement
-
-
-
-} // end of deleteIth function
-
-// PURPOSE: Error cases: If I is an illegal value (i.e. > Count+1 or < 1) throw an exception.
-//
-// Special cases: this should simply call addFront (I==1) or addRear (I==Count+1)
-// for some cases.
-//
-// Regular cases: will add right before the Ith node. Count is updated.
-// Note that if you go to the I-1th node, and also place another pointer on the
-// Ith node, you can place a new node between them.
-// PARAMETER: int I represents the index of the I node and el_t newNum is the index
-// of the new value inside the node.
-void llist::insertIth(int I, PCB newNum) {
-
-    Node *temp = new Node;
-    temp -> Elem = newNum;
-
-    Node *previous = new Node;
-    Node *current = new Node;
-
-    current = Front;
-    if (Front != NULL) {
-        int i = 1;
-        while (current -> Next != NULL && i <= I-1) { // go through the llist
-
-            previous = current; // store the node
-            current = current -> Next;
-            i++;
-        } // end of while loop
-        if (I == 1) { // add begin of llist
-            this-> addFront(newNum);
-        } else if (current -> Next == NULL && I == Count + 1) { // add last value llist
-            this -> addRear(newNum);
-        }
-        else if (I > Count+1 || I < 1){ // this is Out of range
-            throw OutOfRange();
-        } else {
-            previous -> Next = temp;
-            temp -> Next = current;
-            Count++;
-        } // end of if statement
-    } else { // if the Front is NULL
-        if (I > Count+1 || I < 1){ // this is Out of range
-            throw OutOfRange();
-        } else if ( I == 1){ // add value in the beginning
-            this -> addFront(newNum);
-        } else if (current -> Next == NULL && Count + 1) {
-            this -> addRear(newNum); // add value in the last of the llist
-        } else {
-            Front = temp;
-            temp -> Next = NULL;
-            Count++;
-        } // end of if statement
-    } // end of if statement
-
-} // end of insertIth function
-
-
-
+// PURPOSE: It calculates the summation from the previous value
+// PARAMETER: No parameters
 void llist::turnaroundTime()
 {
+	// initialize a node
       Node *temp = new Node;
-      //int ttcurr, ttprev, time;
       int sum = 0;
       temp = Front;
+     
       if (this -> isEmpty()) { // if empty print empty
           cout << "[ empty ]" << endl;
       } else {// end of if statement.
-          //cout << "[ ";
-          while (temp!=NULL) // go through the llist
+          
+	  while (temp!=NULL) // go through the llist
           {
-	     /* if (temp-> Elem.id == 1)
-	      {
-		      ttcurr = temp -> Elem.burst;
-		      ttprev = ttcurr;
-		      temp -> Elem.tatime = ttcurr;
-	      } else {
-		      ttcurr = temp -> Elem.burst;
-		      time = ttcurr + ttprev;
-		      ttprev = time;
-		      temp -> Elem.tatime = time;
-	      }	*/
-
+	      // sum up every previous value
 	      sum += temp -> Elem.burst;
+	      // store the summation value into the object
     	      temp -> Elem.tatime = sum;	      
-
+	      // goes to the next linked list
               temp = temp -> Next;
 	      
           } // end of while loop
-      }
+      }// end of if statement
   
-}
+} // end of turnaroundTime function
 
+
+// PURPOSE: It calculates the average from the object turning time
+// PARAMETER: No parameters
 float llist::avgturningTime()
 {
+	// intialize the variables
 	Node *temp = new Node;
        temp = Front;
        int countTime = 0;
@@ -404,47 +249,100 @@ float llist::avgturningTime()
        if (this -> isEmpty()) { // if empty print empty
            cout << "[ empty ]" << endl;
        } else {// end of if statement.
-           //cout << "[ ";
            while (temp!=NULL) // go through the llist
            {
+		// sum up every previous value	   
                sum += temp -> Elem.tatime;
+	       // counts the number of times
                countTime++;
- 
+ 		// goes to the next linked list
                temp = temp -> Next;
  
            } // end of while loop
-       }
-
+       } // end of if statement
+	// calculates the averages
        avg = (double)sum /countTime;
+       // returns the average value
        return avg;
+
+} // end of avgturningTime function
+
+// PURPORSE: It calculates the turning time standard deviation from the object
+// PARAMETER: No parameters
+float llist::stdturningTime()
+{
+	// initialize the variables
+  	Node *temp = new Node;
+        float sum = 0;
+        int countTime = 0;
+        float mean;
+        float stDeviation=0;
+        temp = Front;
+        if (this -> isEmpty()) { // if empty print empty
+            cout << "[ empty ]" << endl;
+        } else {// end of if statement.
+           while (temp!=NULL) // go through the llist
+           {
+		   // sum up every previous value
+                sum += temp -> Elem.tatime;
+		// counts the number of times
+                countTime++;
+		// goes to the next linked list
+                temp = temp -> Next;
+
+            } // end of while loop
+
+        } // end of if statement
+
+	// calculates the mean
+        mean = (double)sum/(countTime+1);
+	// goes over again to calculate the standard deviation
+        for (Node *temp=Front; temp!= NULL; temp = temp-> Next)
+        {
+		// calculates power raise by two and mines the mean
+                stDeviation += pow(temp -> Elem.tatime - mean, 2);
+        }
+	// returns the square root and divided by the total number of data points.
+        return sqrt(stDeviation/(countTime+1));
 
 }
 
 
+// PURPOSE: Calculates the waiting time subtracting the tt - burst time
+// PARAMETER: No parameters
 void llist::waitingTime()
 {
+	// Initialize the variables
        Node *temp = new Node;
        int turntime, waittime, tburst;
        temp = Front;
        if (this -> isEmpty()) { // if empty print empty
            cout << "[ empty ]" << endl;
        } else {// end of if statement.
-           //cout << "[ ";
            while (temp!=NULL) // go through the llist
            {
+	       // store the burst time into integer variable	    
 	       tburst = temp -> Elem.burst;
+	       // store the turn around time into integer variable
 	       turntime = temp -> Elem.tatime;
+	       // calculate the waiting time
 	       waittime = turntime - tburst;
+	       // store the waiting time into the object
 	       temp -> Elem.wtime = waittime;
+	       // go to the next linked list
                temp = temp -> Next;
 
            } // end of while loop
        
-       }
-}
+       } // end of if statement
+} // end of waiting time function
 
+
+// PURPOSE: Calculates the average waiting time from the object
+// PARAMETERS: No parameters
 float llist::avgwaitingTime()
 {
+	// initialize the variables
         Node *temp = new Node;
 	float sum = 0;
 	float avg;
@@ -453,144 +351,252 @@ float llist::avgwaitingTime()
         if (this -> isEmpty()) { // if empty print empty
             cout << "[ empty ]" << endl;
         } else {// end of if statement.
-            //cout << "[ ";
             while (temp!=NULL) // go through the llist
             {
+		// sum up all the waiting time values
 		sum += temp -> Elem.wtime;
-                countTime++;
+                // increments the number of times inside the loop
+		countTime++;
+		// go to the next linked list
                 temp = temp -> Next;
  
             } // end of while loop
  
-        }
+        } // end of if statement
+	// calculates the average 
 	avg = (double)sum /countTime;
+	// returns the final solution
 	return avg;
 }
+// PURPOSE: Standard Deviation for the waiting time function
+// PARAMETERS: No parameters
+float llist::stdwaitingTime()
+{
+	// Initialize the variables
+         Node *temp = new Node;
+         float sum = 0;
+         int countTime = 0;
+	 float mean;
+	 float stDeviation=0;
+         temp = Front;
+         if (this -> isEmpty()) { // if empty print empty
+             cout << "[ empty ]" << endl;
+         } else {// end of if statement.
+            while (temp!=NULL) // go through the llist
+            {
+		 // sum up all the waiting time values
+                 sum += temp -> Elem.wtime;
+                 // increments the number of times inside the loop
+		 countTime++;
+                 // go to the next linked list
+		 temp = temp -> Next;
+ 
+             } // end of while loop
+ 
+         } // end of if statement
+
+	 // calculate the mean from waiting time
+	 mean = (double)sum/(countTime+1);
+	 // for loop loops to the linked list and calculates the
+	 // standard deviation
+	 for (Node *temp=Front; temp!= NULL; temp = temp-> Next)
+	 {
+		 // calculates the standard deviation
+		 stDeviation += pow(temp -> Elem.wtime - mean, 2);
+	 }
+	 // returns the final solution for the standard deviation
+         return sqrt(stDeviation/(countTime+1));
+} // end of standard deviation waiting time function
 
 
-// Swap the Nodes
+
+// PURPOSE: Swap the Nodes of the linked list
+// PARAMETERS: ptr node is the first node we want to swap to 
+// prt2 node.
 Node* llist::swap(Node *ptr1, Node *ptr2)
 {
+	// store second node into tmp node
 	Node *tmp = ptr2 -> Next;
+	// overwrite ptr2 to prt1
 	ptr2 -> Next = ptr1;
+	// store tmp into ptr1 and 
+	// completes the swap node.
 	ptr1 -> Next = tmp;
+	// return the second node.
 	return ptr2;
-}
+} // end of swap function
 
-
+// PURPOSE: sort function for linked list
+// PARAMETERS: string is refer which parameter from the object needs
+// to be sort.
 void llist::sort(string nameType)
 {
+	// initialize the variables
 	Node *temp = Front;
 
 	int countList=0;	
 	if (this -> isEmpty()) { // if empty print empty
              cout << "[ empty ]" << endl;
          } else {// end of if statement.
-             //cout << "[ ";
              while (temp!=NULL) // go through the llist
              {
+		 // increment the number of list
 		 countList++;    
-                 temp = temp -> Next;
+                 // go to the next linked list
+		 temp = temp -> Next;
  
              } // end of while loop
  
-         }
-	
+         }// end of if statement.
+	// intialize the front of the linked list
 	Node *tmp = Front;
+	// call the bubble sort function
 	bubbleSort(&tmp, countList, nameType);
-	 //Front(5) 3 4 1 8 7 2 6
-         //1 2 3 4 Front(5) 6 7 8
+	  // this is example on how the bubble sort works
+	  // e.g.,
+	  //Front(5) 3 4 1 8 7 2 6
+          //1 2 3 4 Front(5) 6 7 8
+
+	// we need to saved the tmp node in the beginning 
+	// of the linked list saved "Front(5) 6 7 8"
 	Front = tmp;
-}
+	// if tmp is not saved under Front it only sort half
+	// of the linked list.
+} // end of sort function
 
 
-// Bubble Sort
+// PURPOSE: Bubble Sort linked list function
+// PARAMETERS: node represent the first linked list, second parameter
+// represent the total number of the linked list, and last parameter
+// refers which parameter from the object you wish to sort.
 void llist::bubbleSort(Node **head, int count, string nameType)
 {
-
+	// intialize the variables
 	Node **h;
 	int i, j, swapped;
+	// intialize the first for loop
 	for (i = 0; i<= count; i++)
 	{
+		// save the first node from the linked list
 		h = head;
 		swapped = 0;
 
+		// initialize the second for loop
 		for (j = 0; j < count -i - 1; j++)
 		{
-				
+			// initialize the nodes	
 			Node *p1 = *h;
 			Node *p2 = p1 -> Next;
+			// if burst parameter is true
+			// then sort the burst parameters from the object
 			if (nameType == "burst")
 			{
+				// if the burst time in the first node
+				// is greater than the burst time for the second node
 				if (p1 -> Elem.burst > p2 -> Elem.burst)
 				{
+					// swap the nodes
 					*h = swap(p1, p2);
+					// flag them that they were swap.
 					swapped = 1;
-				}
+				} // end of if statement
 			} else if (nameType == "priority")
 			{
+				// if priority is selected 
+				// the first node priority is less than the second node
+				// this means sorts the highest value from the priority object
 				if (p1 -> Elem.priority < p2 -> Elem.priority)
 				{
+					// swap the priority values inside the nodes.
 					*h = swap(p1,p2);
+					// flag them that they were swap.
 					swapped = 1;
-				}
+				} // end of if statement
 			} else if (nameType == "id")
 			{
+				// if number of id is selected
+				// the first node id is greater than the second node
+				// this means sort the lowest value from the id object
 				if (p1 -> Elem.id > p2 -> Elem.id)
 				{
+					// swap the id values inside the nodes.
 					*h = swap(p1,p2);
+					// flag them that they were swap.
 					swapped = 1;
-				}
-			}
+				} // end of if statement
+			} // end of if statement
+
+			// go to the next linked list node
 
 			h = &(*h) -> Next;
-		}
+		} // end of second for loop
 
+		// if swapped is false then break the loop
 		if (swapped == 0)
 		{
 			break;
-		}
-	}
-}
+		} // end of if statement
+	}  // end of first for loop
+} // end of bubble sort function.
 
-
+// PURPOSE: Round Robin (RR) waiting time function
+// PARAMETERS: passed integer quantum value
 void llist::rrWaitingTime(int quantum)
 {
-         // Current time
+         // initialize variable
          int t = 0;
+	 // infinitely while loop
          while (true)
 	 {
+		 // flag when it is done the process
                  bool done = true;
+		 // for loop for linked list
                  for (Node *temp=Front; temp!=NULL; temp=temp-> Next)
                  {
+			 // if the remainder is greater than zero
                          if ( temp -> Elem.remainder > 0)
                          {
+				 // process is pending
                                  done = false;
 
+				 // if the remainder is greater than the quantum
+				 // please continue inside the loop
                                  if ( temp -> Elem.remainder > quantum)
                                  {
+					 // increment the number of time by quantum value.
 					 t += quantum;
+					 // decrease the value of the remainder by the number of quantum.
                                          temp -> Elem.remainder -= quantum;
                                  } else {
+					 // increment the number of time by the remainder
                                          t = t + temp -> Elem.remainder;
+					 // calculate the waiting time
                                          temp -> Elem.wtime = t - temp -> Elem.burst;
+					 // define the remainder as zero
 					 temp -> Elem.remainder = 0;
 
-                                 }
-                         }
-                 }
+                                 }// end of if statement
+                         } // end of if statement.
+                 } // end of for loop.
 
+		 // if the done is true
+		 // the process is completed and
+		 // breaks the while loop.
                  if (done == true)
                  {
                          break;
-                 }
-         } 
+                 } // end of if statement
+         } // end of infinitely while loop
 
 
-}
+} // end of round robin waiting time function 
 
+
+// PURPOSE: Round Robin Turn Around Time function
+// Parameters: No parameters
 void llist::rrTurnAroundTime()
 {
+	// initialize the variables
 	Node *temp = Front;
 
 	if (this -> isEmpty()) { // if empty print empty
@@ -598,137 +604,18 @@ void llist::rrTurnAroundTime()
         } else {// end of if statement.
               while (temp!=NULL) // go through the llist
               {
+		      // calculate the turnaround time
 		      temp -> Elem.tatime = temp-> Elem.burst + temp -> Elem.wtime;
+		      // go to the next linked list
 		      temp = temp -> Next;
 
               } // end of while loop
 
-        }
+        } // end of if statement
 
 
 
-}
-
-
-
-Node* llist::findTail()
-{
-	Node *temp = Front;
-	while (temp -> Next != NULL)
-	{
-		temp = temp -> Next;
-	}
-
-	return temp;
-}
-
-
-void llist::makeDoublyLinkedList()
-{
-	//Node *tail = findTail();
-	//*tail - > Next = Front;
-	
-	Node *temp = Front;
-	while (temp -> Next != NULL)
-	{
-		temp = temp -> Next;
-	}
-
-	temp -> Next = Front;
-	
-	
-}
-
-
-int llist::nodeCount() 
-{
-	int nodeCount;
-	Node *current = Front;
-	if (Front != NULL)
-	{
-		nodeCount = 1;
-	} else {
-		nodeCount = 0;
-	}
-
-	while(current -> Next != Front)	
-	{
-		nodeCount += 1;
-		current = current -> Next;
-	} // end while
-	return nodeCount;
-} // end nodeCount
-
-
-
-int llist::checkForZeros()
-{
-	int nodeCount;
-
-	Node *temp = Front;
-
-	if (Front != NULL)
-	{
-		nodeCount = 1;
-	} else {
-		nodeCount = 0;
-	}
-
-	while (temp -> Next != Front)
-	{
-		nodeCount += 1;
-		temp=temp -> Next;
-	}
-
-
-	int zeroCount = 0;
-	int iterationCount = 0;
-	bool isRunning = true;
-	Node *current = Front;
-
-
-	while(isRunning)
-	{
-		if (current ->  Elem.burst == 0) 
-		{
-			zeroCount += 1;
-		} // end of if
-		iterationCount += 1;
-		if (zeroCount == nodeCount || iterationCount == nodeCount) 
-		{
-			isRunning = false;
-		} // end if
-		current = current -> Next;
-	} // end while
-	return zeroCount;
-} // end checkForZeros
-
-
-
-
-void llist::rrImplementation()
-{
-	Node *current = Front;
-	int timeQuantum = 10;
-	int numOfZeros = 0;
-	int numOfProcesses = nodeCount();
-	while (numOfZeros < numOfProcesses) 
-	{
-		numOfZeros = 0;
-		if (current -> Elem.burst <= timeQuantum )
-		{
-			current -> Elem.burst = 0;
-		} else if (current ->  Elem.burst > timeQuantum) 
-		{
-			current -> Elem.burst -= timeQuantum;
-
-		}
-		numOfZeros = checkForZeros();
-		current = current -> Next;
-	}
-}
-
-
+}// end of rrTurnAroundTime function.
 
 
 // PURPOSE: Copy Constructor to allow pass by value and return by value

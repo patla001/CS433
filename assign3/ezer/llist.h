@@ -1,18 +1,3 @@
-//CS311 Yoshii
-//INSTRUCTION:
-//Llist class - header file template
-//You must complete the ** parts and then complete llist.cpp
-//Don't forget PURPOSE and PARAMETERS
-
-// =======================================================
-// HW#: HW3P1 llist
-// Your name: Ezer Patlan
-// Compiler:  g++
-// File type: headher file  llist.h
-//=======================================================
-
-// alias el_t : element type definition
-//typedef char el_t;
 #include "PCB.h"
 
 //a list node is defined here as a struct Node for now
@@ -49,15 +34,6 @@ protected:
   void displayAll();
 
 
-
-  //special case: if this is going to be the very first node, you must create
-  // a new node and make Front and Rear point to it. Put NewNum in the Elem field
-  // of this new node. Count is updated.
-  //
-  // regular case: add a new node at the front and puts NewNum in the Elem field
-  // of this new node. Count is updated.
-  void addFront(PCB);
-
   //special case: if this is going to be the very first node, you must create a
   // new node and make Front and Rear point to it. Put NewNum in the Elem field
   // of this new node. Count is updated.
@@ -87,41 +63,45 @@ protected:
   // and also remove the rear node. Count is updated.
   void deleteRear(PCB&);
 
-  //Error case: If I is an illegal value (i.e. > Count or < 1) throw an exception.
-  //
-  // Special case: this should simply call deleteFront (I=1) or deleteRear (I==Count)
-  // for some cases.
-  //
-  // Regular case: will delete the Ith node (I starts out at 1). Count is updated.
-  // Note that if you go to the I-1th node, and also place another pointer on
-  // the I+1th node, you can bypass the Ith node. Draw pictures first.
-  void deleteIth(int, PCB&);
 
-  // Error cases: If I is an illegal value (i.e. > Count+1 or < 1) throw an exception.
-  //
-  // Special cases: this should simply call addFront (I==1) or addRear (I==Count+1)
-  // for some cases.
-  //
-  // Regular cases: will add right before the Ith node. Count is updated.
-  // Note that if you go to the I-1th node, and also place another pointer on the
-  // Ith node, you can place a new node between them.
-  void insertIth(int, PCB);
-
-  // sorts the linked list by changing next pointers (not data)
+  // calculates the turn around time inside the linked list
   void turnaroundTime();
+  
+  // calculates the average of the turning around time and
+  // output the average
   float avgturningTime();
+  
+  // calculates the standard deviation of the turning around time
+  // and outputs the standard deviation
+  float stdturningTime();
+  
+  // calculates the waiting time inside the linked list
   void waitingTime();
+  
+  // calculates the standard deviation of the waiting time
+  // and outputs the standard deviation
+  float stdwaitingTime();
+  
+  // calculates the average of the waiting time and outputs the 
+  // average.
   float avgwaitingTime();
+  
+  // swap the nodes from the linked list
   Node* swap(Node *ptr1, Node *ptr2);
+  
+  // bubble sort technique sort the nodes by swapping them
+  // until all values are descending or ascending
   void bubbleSort(Node **head, int count, string nameType);
+  
+  // sort function calls the bubble sort
   void sort(string nameType);
+  
+  // calculates the round robin waiting time
   void rrWaitingTime(int quantum);
+  
+  // calculates the round robin turning around time
   void rrTurnAroundTime();
-  void makeDoublyLinkedList();
-  int nodeCount();
-  int checkForZeros();
-  void rrImplementation();
-  Node* findTail();
+  
   //Copy Constructor to allow pass by value and return by value
   llist(const llist&);
 
