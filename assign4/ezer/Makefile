@@ -7,7 +7,7 @@ CFLAGS = -g -Wall -std=c++11		# compilation flags: -g for debugging. Change to -
 LIB = -lm -lpthread			# linked libraries	
 LDFLAGS = -L.			# link flags
 PROG = prog4			# target executable (output)
-SRCS = main.cpp buffer.cpp        # .c or .cpp source files.
+SRCS = main.cpp         # .c or .cpp source files.
 OBJ = $(SRCS:.cpp=.o) 	# object files for the target. Add more to this and next lines if there are more than one source files.
 
 all : $(PROG) depend
