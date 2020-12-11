@@ -5,6 +5,9 @@
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <queue>
+#include <unordered_set>
+using namespace std;
 
 // Check if an integer is power of 2
 bool isPowerOfTwo(unsigned int x)
@@ -31,9 +34,10 @@ int main(int argc, char* argv[]) {
 			<< " - physical memory size (in megabytes): between 4 and 64, inclusive" << std::endl;
 		exit(1);
 	}
-	
-	// Page size and Physical memory size 
-	// Their values should be read from command-line arguments, and always a power of 2
+
+	// Page size and Physical memory size
+	// Their values should be read from command-line arguments,
+	// and always a power of 2
 	unsigned int page_size = atoi(argv[1]);
 	if(!isPowerOfTwo(page_size))
 	{
@@ -41,7 +45,8 @@ int main(int argc, char* argv[]) {
 			<< "  (must be an power of 2 between 256 and 8192, inclusive)." << std::endl;
 		return 1;
 	}
-	unsigned int phys_mem_size = atoi(argv[2]) << 20; // convert from MB to bytes
+	// convert from MB to bytes
+	unsigned int phys_mem_size = atoi(argv[2]) << 20;
 	if(!isPowerOfTwo(phys_mem_size))
 	{
 		std::cout << "You have entered an invalid parameter for physical memory size (MB)" << std::endl
@@ -50,28 +55,134 @@ int main(int argc, char* argv[]) {
 	}
 
 	// calculate number of pages and frames;
-	int logic_mem_bits = 27;		// 27-bit logical memory (128 MB logical memory assumed by the assignment)
-	int phys_mem_bits = std::log2(phys_mem_size);		// Num of bits for physical memory addresses, calculated from physical memory size, e.g. 24 bits for 16 MB memory
-	int page_offset_bits = std::log2(page_size);				// Num of bits for page offset, calculated from page size, e.g. 12 bits for 4096 byte page
-	// Number of pages in logical memory = 2^(logic_mem_bits - page_bit)
+	// 27-bit logical memory
+	// (128 MB logical memory assumed by the assignment)
+	int logic_mem_bits = 27;
+	// Num of bits for physical memory addresses,
+	// calculated from physical memory size,
+	// e.g. 24 bits for 16 MB memory
+	int phys_mem_bits = std::log2(phys_mem_size);
+	// Num of bits for page offset, calculated from page size,
+	// e.g. 12 bits for 4096 byte page
+	int page_offset_bits = std::log2(page_size);
+	// Number of pages in
+	// logical memory = 2^(logic_mem_bits - page_bit)
 	int num_pages = 1 << (logic_mem_bits - page_offset_bits);
-	// Number of free frames in physical memory = 2^(phys_mem_bits - page_offset_bits)
+	// Number of free frames in
+	// physical memory = 2^(phys_mem_bits - page_offset_bits)
 	int num_frames = 1 << (phys_mem_bits - page_offset_bits);
-	
+
 	std::cout << "Page size = " << page_size << " bytes" << std::endl;
 	std::cout << "Physical Memory size = " << phys_mem_size << " bytes" << std::endl;
-	std::cout << "Number of pages = " << num_pages << std::endl; 
+	std::cout << "Number of pages = " << num_pages << std::endl;
 	std::cout << "Number of physical frames = " << num_frames << std::endl;
+
+	// Intialize the Page Table Class
+	//PageTable assign5;
+	//assign5.phys_mem_bits = phys_mem_bits;
+	//assign5.page_size = page_size;
+	//assign5.num_frames = num_frames;
+	////int size = assign5.phys_mem_bits / assign5.page_size;
+	//assign5.setup(num_pages);
 
 	// Test 1: Read and simulate the small list of logical addresses from the input file "small_refs.txt"
 	std::cout <<"\n================================Test 1==================================================\n";
 	// TODO: Add your code here for test 1 that prints out logical page #, frame # and whether page fault for each logical address
-	
+
+	unordered_set<int> s;
+
+    // To store the pages in FIFO matter
+    queue<int> indexes;
+	int page_faults=0;
+	int numberFrames = num_frames;
+	int frame_number = 0;
+	int totalReferences = 0;
+	// read the text file
+	ifstream file("small_refs.txt");
+	string line;
+	//vector<int> V;
+	while (file >> line)
+	{
+		int value = stoi(line);
+		int pageNumber = value/page_size;
+		
+		// check if the set can hold more pages
+
+
+
+        if (s.size() < numberFrames)
+        {
+
+
+            if (s.find(pageNumber) == s.end())
+            //if (s.find())
+            {
+                // insert the current page into the set
+                s.insert(pageNumber);
+
+                // increment page fault
+                page_faults++;
+
+                // Push the current page into the queue
+                indexes.push(pageNumber);
+				cout << "Logical address: " << value << ", 	" << "page number: ";
+				cout  << pageNumber << ", 	" << "frame number = " << frame_number << ", 	";
+				cout << "is page fault? " << 1 << endl;
+				frame_number++;
+
+            } else {
+				cout << "Logical address: " << value << ", 	" << "page number: ";
+				cout  << pageNumber << ", 	" << "frame number = " << 0 << ", 	";
+				cout << "is page fault? " << 0 << endl;
+			}
+        } else {
+            // Check if current page is not already
+            // present in the set
+            if (s.find(pageNumber) == s.end())
+            {
+                // Store the first page in the
+                // queue to be used to find and
+                // earse the page from the set
+                int val = indexes.front();
+
+                // Pop the first page from the queue
+                indexes.pop();
+
+                // Remove the indexes page from the set
+                s.insert(pageNumber);
+
+                // push the current page into
+                // the queue
+                indexes.push(pageNumber);
+				cout << "Logical address: " << value << ", 	" << "page number: ";
+				cout  << pageNumber << ", 	" << "frame number = " << frame_number << ", 	";
+				cout << "is page fault? " << 1 << endl;
+				frame_number++;
+                // Increment page Faults
+                page_faults++;
+            } else {
+				cout << "Logical address: " << value << ", 	" << "page number: ";
+				cout  << pageNumber << ", 	" << "frame number = " << 0 << ", 	";
+				cout << "is page fault? " << 0 << endl;
+			}
+        }
+
+		totalReferences++;
+
+		//assign5.totalReferences++;
+	}
+
+	cout << "Number of references: " << totalReferences << endl;
+	cout << "Number of page faults: " << page_faults << endl;
+	cout << "Number of page replacements: " << 0 << endl;
+
+
+
 	// Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
 	std::cout <<"\n================================Test 2==================================================\n";
 
 	std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
-	// TODO: Add your code to calculate number of page faults using FIFO replacement algorithm	
+	// TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
 	// TODO: print the statistics and run-time
 
 	std::cout << "****************Simulate Random replacement****************************" << std::endl;
