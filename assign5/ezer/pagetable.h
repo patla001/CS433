@@ -54,11 +54,18 @@ public:
 	int totalFaults;
 	// number of lines
 	int totalReferences;
-
+	// elapsed time
+	double elapsed;
+	// select a type of page replacement algorithm.
+	int selection;
 	PageTable();
 	// Search for the frame numbers on teh PageEntry
 
 	int search(int value);
-	// FIFO Algorithm
+	// Test1 FIFO Algorithm, small dataset
 	void Test1(int numberFrames);
+	// Test2 FIFO Algorithm, large dataset
+	void FIFO(int numberFrames);
+
+	void LRU(int numberFrames);
 };

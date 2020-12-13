@@ -6,6 +6,7 @@
 #include <cmath>
 #include <vector>
 #include <queue>
+#include <chrono>
 #include <unordered_set>
 #include "pagetable.h"
 using namespace std;
@@ -83,27 +84,51 @@ int main(int argc, char* argv[]) {
 	assign5.phys_mem_bits = phys_mem_bits;
 	assign5.page_size = page_size;
 	assign5.num_frames = num_frames;
-	
+	assign5.selection = 3;
 
-	// Test 1: Read and simulate the small list of logical addresses from the input file "small_refs.txt"
-	std::cout <<"\n================================Test 1==================================================\n";
-	// TODO: Add your code here for test 1 that prints out logical page #, frame # and whether page fault for each logical address
+	auto begin = std::chrono::high_resolution_clock::now();
+	switch (assign5.selection)
+	{
+		case 0:
+				// Test 1: Read and simulate the small list of logical addresses from the input file "small_refs.txt"
+				std::cout <<"\n================================Test 1==================================================\n";
+				// TODO: Add your code here for test 1 that prints out logical page #, frame # and whether page fault for each logical address
 
-	assign5.Test1(num_frames);
+				assign5.Test1(num_frames);
+				break;
+		case 1:
 
-	// Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
-	std::cout <<"\n================================Test 2==================================================\n";
+				// Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
+				std::cout <<"\n================================Test 2==================================================\n";
 
-	std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
-	// TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
-	// TODO: print the statistics and run-time
+				std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
+				// TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
+				// TODO: print the statistics and run-time
+				//auto begin = std::chrono::high_resolution_clock::now();
+				assign5.FIFO(num_frames);
+				//auto end = std::chrono::high_resolution_clock::now();
+				//assign5.elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
+				//cout << "elapsed time: " << assign5.elapsed << " ms" << endl;
+				break;
+		case 2:
 
-	std::cout << "****************Simulate Random replacement****************************" << std::endl;
-	// TODO: Add your code to calculate number of page faults using Random replacement algorithm
-	// TODO: print the statistics and run-time
+				std::cout << "****************Simulate Random replacement****************************" << std::endl;
+				// TODO: Add your code to calculate number of page faults using Random replacement algorithm
+				// TODO: print the statistics and run-time
+				break;
+		case 3:
 
-	std::cout << "****************Simulate LRU replacement****************************" << std::endl;
-	// TODO: Add your code to calculate number of page faults using LRU replacement algorithm
-	// TODO: print the statistics and run-time
-
+				std::cout << "****************Simulate LRU replacement****************************" << std::endl;
+				// TODO: Add your code to calculate number of page faults using LRU replacement algorithm
+				// TODO: print the statistics and run-time
+				//auto begin = std::chrono::high_resolution_clock::now();
+				assign5.LRU(num_frames);
+				//auto end = std::chrono::high_resolution_clock::now();
+				//assign5.elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
+				//cout << "elapsed time: " << assign5.elapsed << " ms" << endl;
+				break;
+	}
+	auto end = std::chrono::high_resolution_clock::now();
+	assign5.elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
+	cout << "elapsed time: " << assign5.elapsed << " ms" << endl;
 }

@@ -1,0 +1,123 @@
+$ ./prog5 256 4
+=================================================================
+CS 433 Programming assignment 5
+Author: Ezer Patlan and Cody Chalder
+Date: 12/11/2020
+Course: CS433 (Operating Systems)
+Description : Program to simulate different page replacement algorithms
+=================================================================
+
+Page size = 256 bytes
+Physical Memory size = 4194304 bytes
+Number of pages = 524288
+Number of physical frames = 16384
+
+================================Test 1==================================================
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 72042423, 	page number: 281415, 	frame number = 1, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 1
+Logical address: 72084158, 	page number: 281578, 	frame number = 3, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101854129, 	page number: 397867, 	frame number = 4, 	is page fault? 1
+Logical address: 71978895, 	page number: 281167, 	frame number = 5, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 72272062, 	page number: 282312, 	frame number = 6, 	is page fault? 1
+Logical address: 71755731, 	page number: 280295, 	frame number = 7, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71990563, 	page number: 281213, 	frame number = 8, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853338, 	page number: 397864, 	frame number = 9, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71917530, 	page number: 280927, 	frame number = 10, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71854261, 	page number: 280680, 	frame number = 11, 	is page fault? 1
+Logical address: 71979860, 	page number: 281171, 	frame number = 12, 	is page fault? 1
+Logical address: 71721778, 	page number: 280163, 	frame number = 13, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853744, 	page number: 397866, 	frame number = 14, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853744, 	page number: 397866, 	frame number = 14, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71697486, 	page number: 280068, 	frame number = 15, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71987865, 	page number: 281202, 	frame number = 16, 	is page fault? 1
+Logical address: 72439020, 	page number: 282964, 	frame number = 17, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71566676, 	page number: 279557, 	frame number = 18, 	is page fault? 1
+Logical address: 71970526, 	page number: 281134, 	frame number = 19, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71957576, 	page number: 281084, 	frame number = 20, 	is page fault? 1
+Logical address: 71972234, 	page number: 281141, 	frame number = 21, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71965339, 	page number: 281114, 	frame number = 22, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101852398, 	page number: 397860, 	frame number = 23, 	is page fault? 1
+Logical address: 71982260, 	page number: 281180, 	frame number = 24, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71768626, 	page number: 280346, 	frame number = 25, 	is page fault? 1
+Logical address: 101853483, 	page number: 397865, 	frame number = 26, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853483, 	page number: 397865, 	frame number = 26, 	is page fault? 0
+Logical address: 101853744, 	page number: 397866, 	frame number = 14, 	is page fault? 0
+Logical address: 101853483, 	page number: 397865, 	frame number = 26, 	is page fault? 0
+Logical address: 71946808, 	page number: 281042, 	frame number = 27, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71922510, 	page number: 280947, 	frame number = 28, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 72005148, 	page number: 281270, 	frame number = 29, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101852526, 	page number: 397861, 	frame number = 30, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71990332, 	page number: 281212, 	frame number = 31, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853483, 	page number: 397865, 	frame number = 26, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 72170392, 	page number: 281915, 	frame number = 32, 	is page fault? 1
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 72034799, 	page number: 281385, 	frame number = 33, 	is page fault? 1
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853338, 	page number: 397864, 	frame number = 9, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71839460, 	page number: 280622, 	frame number = 34, 	is page fault? 1
+Logical address: 101853744, 	page number: 397866, 	frame number = 14, 	is page fault? 0
+Logical address: 101853141, 	page number: 397863, 	frame number = 0, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Logical address: 71971407, 	page number: 281138, 	frame number = 2, 	is page fault? 0
+Number of references: 100
+Number of page faults: 35
+Number of page replacements: 0
+
+================================Test 2==================================================
+****************Simulate FIFO replacement****************************
+****************Simulate Random replacement****************************
+****************Simulate LRU replacement****************************
