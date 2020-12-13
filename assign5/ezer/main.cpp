@@ -7,6 +7,7 @@
 #include <vector>
 #include <queue>
 #include <unordered_set>
+#include "pagetable.h"
 using namespace std;
 
 // Check if an integer is power of 2
@@ -78,105 +79,17 @@ int main(int argc, char* argv[]) {
 	std::cout << "Number of physical frames = " << num_frames << std::endl;
 
 	// Intialize the Page Table Class
-	//PageTable assign5;
-	//assign5.phys_mem_bits = phys_mem_bits;
-	//assign5.page_size = page_size;
-	//assign5.num_frames = num_frames;
-	////int size = assign5.phys_mem_bits / assign5.page_size;
-	//assign5.setup(num_pages);
+	PageTable assign5;
+	assign5.phys_mem_bits = phys_mem_bits;
+	assign5.page_size = page_size;
+	assign5.num_frames = num_frames;
+	
 
 	// Test 1: Read and simulate the small list of logical addresses from the input file "small_refs.txt"
 	std::cout <<"\n================================Test 1==================================================\n";
 	// TODO: Add your code here for test 1 that prints out logical page #, frame # and whether page fault for each logical address
 
-	unordered_set<int> s;
-
-    // To store the pages in FIFO matter
-    queue<int> indexes;
-	int page_faults=0;
-	int numberFrames = num_frames;
-	int frame_number = 0;
-	int totalReferences = 0;
-	// read the text file
-	ifstream file("small_refs.txt");
-	string line;
-	//vector<int> V;
-	while (file >> line)
-	{
-		int value = stoi(line);
-		int pageNumber = value/page_size;
-		
-		// check if the set can hold more pages
-
-
-
-        if (s.size() < numberFrames)
-        {
-
-
-            if (s.find(pageNumber) == s.end())
-            //if (s.find())
-            {
-                // insert the current page into the set
-                s.insert(pageNumber);
-
-                // increment page fault
-                page_faults++;
-
-                // Push the current page into the queue
-                indexes.push(pageNumber);
-				cout << "Logical address: " << value << ", 	" << "page number: ";
-				cout  << pageNumber << ", 	" << "frame number = " << frame_number << ", 	";
-				cout << "is page fault? " << 1 << endl;
-				frame_number++;
-
-            } else {
-				cout << "Logical address: " << value << ", 	" << "page number: ";
-				cout  << pageNumber << ", 	" << "frame number = " << 0 << ", 	";
-				cout << "is page fault? " << 0 << endl;
-			}
-        } else {
-            // Check if current page is not already
-            // present in the set
-            if (s.find(pageNumber) == s.end())
-            {
-                // Store the first page in the
-                // queue to be used to find and
-                // earse the page from the set
-                int val = indexes.front();
-
-                // Pop the first page from the queue
-                indexes.pop();
-
-                // Remove the indexes page from the set
-                s.insert(pageNumber);
-
-                // push the current page into
-                // the queue
-                indexes.push(pageNumber);
-				cout << "Logical address: " << value << ", 	" << "page number: ";
-				cout  << pageNumber << ", 	" << "frame number = " << frame_number << ", 	";
-				cout << "is page fault? " << 1 << endl;
-				frame_number++;
-                // Increment page Faults
-                page_faults++;
-            } else {
-				cout << "Logical address: " << value << ", 	" << "page number: ";
-				cout  << pageNumber << ", 	" << "frame number = " << 0 << ", 	";
-				cout << "is page fault? " << 0 << endl;
-			}
-        }
-
-		totalReferences++;
-
-		//assign5.totalReferences++;
-	}
-
-	cout << "Number of references: " << totalReferences << endl;
-	cout << "Number of page faults: " << page_faults << endl;
-	cout << "Number of page replacements: " << 0 << endl;
-
-
+	assign5.Test1(num_frames);
 
 	// Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
 	std::cout <<"\n================================Test 2==================================================\n";
