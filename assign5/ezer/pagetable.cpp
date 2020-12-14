@@ -9,6 +9,7 @@
 #include <queue>
 #include <unordered_set>
 #include <unordered_map>
+#include <stdlib.h>
 
 #include "pagetable.h"
 
@@ -87,10 +88,12 @@ void PageTable::Test1(int numberFrames)
 	int page_faults=0;
     int frame_number = 0;
 	int totalReferences = 0;
+    int totalflushes = 0;
     PageEntry pg;
     // read the text file
 	ifstream file("small_refs.txt");
 	string line;
+    ofstream MyFile("outputTest1FIFO.txt");
     while (file >> line)
     {
         int value = stoi(line);
@@ -132,7 +135,7 @@ void PageTable::Test1(int numberFrames)
                 cout << "is page fault? " << pg.dirty << endl;
                 // increment the frame number
                 frame_number++;
-
+                MyFile << pg.page_number << "," << page_faults << "," << pg.frame_number << "," << totalflushes << endl;
             } else {
                 // search the page number and find the index number for the
                 // pgTable vector
@@ -183,7 +186,7 @@ void PageTable::Test1(int numberFrames)
                 pg.dirty = true;
                 // store in the pgTable vector
                 pgTable.push_back(pg);
-
+                totalflushes++;
                 // print the information to the user
                 cout << "Logical address: " << pg.address;
                 cout << ", 	";
@@ -196,15 +199,16 @@ void PageTable::Test1(int numberFrames)
                 frame_number++;
                 // Increment page Faults
                 page_faults++;
+                MyFile << pg.page_number << "," << page_faults << "," << pg.frame_number << "," << totalflushes << endl;
             }
         }
         // count the number of logical address lines from the text file.
         totalReferences++;
     }
-
+    MyFile.close();
     cout << "Number of references: " << totalReferences << endl;
     cout << "Number of page faults: " << page_faults << endl;
-    cout << "Number of page replacements: " << 0 << endl;
+    cout << "Number of page replacements: " << totalflushes << endl;
 } // end of Test1 Function using FIFO
 
 
@@ -222,6 +226,9 @@ void PageTable::FIFO(int numberFrames)
     // read the text file
 	ifstream file("large_refs.txt");
 	string line;
+
+    ofstream MyFile("outputFIFO.txt");
+
     while (file >> line)
     {
         int value = stoi(line);
@@ -233,7 +240,6 @@ void PageTable::FIFO(int numberFrames)
         {
 
             if (s.find(pageNumber) == s.end())
-
             {
                 // insert the current page into the set
                 s.insert(pageNumber);
@@ -251,17 +257,14 @@ void PageTable::FIFO(int numberFrames)
                 pg.valid = true;
                 pg.dirty = true;
 
-                // if (pg.dirty == true)
-                // {
-                //     totalflushes++;
-                // }
+
 
                 // store in the pgTable vector
                 pgTable.push_back(pg);
 
                 // increment the frame number
                 frame_number++;
-
+                MyFile << pg.page_number << "," << page_faults << "," << frame_number << "," << totalflushes << endl;
             } else {
 
             }
@@ -307,16 +310,139 @@ void PageTable::FIFO(int numberFrames)
                 frame_number++;
                 // Increment page Faults
                 page_faults++;
+                MyFile << pg.page_number << "," << page_faults << "," << frame_number << "," << totalflushes << endl;
             }
         }
         // count the number of logical address lines from the text file.
         totalReferences++;
     }
 
+    MyFile.close();
+
     cout << "Number of references: " << totalReferences << endl;
     cout << "Number of page faults: " << page_faults << endl;
     cout << "Number of page replacements: " << totalflushes << endl;
 } // end of Test1 Function using FIFO
+
+void PageTable::Random(int numberFrames)
+{
+    unordered_set<int> s;
+
+    // To store the pages in FIFO matter
+    queue<int> indexes;
+	int page_faults=0;
+    int frame_number = 0;
+	int totalReferences = 0;
+    int totalflushes = 0;
+    PageEntry pg;
+    // read the text file
+	ifstream file("large_refs.txt");
+	string line;
+    ofstream MyFile("outputRandom.txt");
+    vector <int> refPages;
+
+    while (file >> line)
+    {
+        int value = stoi(line);
+        refPages.push_back(value);
+
+    }
+
+    for (int i = 0; i < refPages.size(); i++)
+    {
+        int rand_number = rand() % refPages.size();
+        int value = refPages[rand_number];
+        int pageNumber = value/page_size;
+
+        if (s.size() < numberFrames)
+        {
+
+               if (s.find(pageNumber) == s.end())
+               {
+                   // insert the current page into the set
+                   s.insert(pageNumber);
+
+                   // increment page fault
+                   page_faults++;
+
+                   // Push the current page into the queue
+                   indexes.push(pageNumber);
+                   // update the object with the page number, frame number,..etc.
+                   pg.address = value;
+                   pg.page_number = pageNumber;
+                   pg.frame_number = frame_number;
+                   pg.last = 0;
+                   pg.valid = true;
+                   pg.dirty = true;
+
+
+
+                   // store in the pgTable vector
+                   pgTable.push_back(pg);
+
+                   // increment the frame number
+                   frame_number++;
+                   MyFile << pg.page_number << "," << page_faults << "," << frame_number << "," << totalflushes << endl;
+               } else {
+
+               }
+           } else {
+               // Check if current page is not already
+               // present in the set
+               if (s.find(pageNumber) == s.end())
+               {
+                   // Store the first page in the
+                   // queue to be used to find and
+                   // earse the page from the set
+                   int val = indexes.front();
+
+                   // Pop the first page from the queue
+                   indexes.pop();
+
+                   // Remove the indexes page from the set
+                   s.erase(val);
+
+                   // insert the current page in the set
+                   s.insert(pageNumber);
+
+                   // push the current page into
+                   // the queue
+                   indexes.push(pageNumber);
+                   // update the object with the page number, frame number,..etc.
+                   pg.address = value;
+                   pg.page_number = pageNumber;
+                   pg.frame_number = frame_number;
+                   pg.last = 0;
+                   pg.valid = true;
+                   pg.dirty = true;
+                   // if (pg.dirty == true)
+                   // {
+                   //     totalflushes++;
+                   // }
+                   totalflushes++;
+                   // store in the pgTable vector
+                   pgTable.push_back(pg);
+
+
+                   // increment the frame number
+                   frame_number++;
+                   // Increment page Faults
+                   page_faults++;
+                   MyFile << pg.page_number << "," << page_faults << "," << frame_number << "," << totalflushes << endl;
+               }
+           }
+           // count the number of logical address lines from the text file.
+           //totalReferences++;
+       }
+       MyFile.close();
+       totalReferences=refPages.size();
+       cout << "Number of references: " << totalReferences << endl;
+       cout << "Number of page faults: " << page_faults << endl;
+       cout << "Number of page replacements: " << totalflushes << endl;
+}
+
+
+
 
 void PageTable::LRU(int numberFrames)
 {
@@ -355,21 +481,21 @@ void PageTable::LRU(int numberFrames)
                 // Push the current page into the queue
                 //indexes.push(pageNumber);
                 // update the object with the page number, frame number,..etc.
-                // pg.address = value;
-                // pg.page_number = pageNumber;
-                // pg.frame_number = frame_number;
-                // pg.last = 0;
-                // pg.valid = true;
-                // pg.dirty = true;
+                 pg.address = value;
+                 pg.page_number = pageNumber;
+                 pg.frame_number = frame_number;
+                 pg.last = 0;
+                 pg.valid = true;
+                 pg.dirty = true;
                 //
                 //
                 //
                 // // store in the pgTable vector
-                // pgTable.push_back(pg);
+                 pgTable.push_back(pg);
 
                 // increment the frame number
                 frame_number++;
-
+                MyFile << pg.page_number << "," << page_faults << "," << frame_number << "," << totalflushes << endl;
             } else {
                 // store the recently used index of
                 // each page
@@ -402,25 +528,26 @@ void PageTable::LRU(int numberFrames)
                 // the queue
                 //indexes.push(pageNumber);
                 // update the object with the page number, frame number,..etc.
-                // pg.address = value;
-                // pg.page_number = pageNumber;
-                // pg.frame_number = frame_number;
-                // pg.last = 0;
-                // pg.valid = true;
-                // pg.dirty = true;
+                 pg.address = value;
+                 pg.page_number = pageNumber;
+                 pg.frame_number = frame_number;
+                 pg.last = 0;
+                 pg.valid = true;
+                 pg.dirty = true;
                 // // if (pg.dirty == true)
                 // // {
                 // //     totalflushes++;
                 // // }
                 totalflushes++;
                 //// store in the pgTable vector
-                //pgTable.push_back(pg);
+                pgTable.push_back(pg);
 
 
                 // increment the frame number
                 frame_number++;
                 // Increment page Faults
                 page_faults++;
+                MyFile << pg.page_number << "," << page_faults << "," << frame_number << "," << totalflushes << endl;
             }
 
             // Update the current page index
@@ -430,7 +557,7 @@ void PageTable::LRU(int numberFrames)
         //cout << "line: " << totalReferences << endl;
         totalReferences++;
     }
-
+    MyFile.close();
     cout << "Number of references: " << totalReferences << endl;
     cout << "Number of page faults: " << page_faults << endl;
     cout << "Number of page replacements: " << totalflushes << endl;

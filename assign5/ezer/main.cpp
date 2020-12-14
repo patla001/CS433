@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
 	assign5.phys_mem_bits = phys_mem_bits;
 	assign5.page_size = page_size;
 	assign5.num_frames = num_frames;
-	assign5.selection = 3;
+	assign5.selection = 1;
 
 	auto begin = std::chrono::high_resolution_clock::now();
 	switch (assign5.selection)
@@ -115,6 +115,8 @@ int main(int argc, char* argv[]) {
 				std::cout << "****************Simulate Random replacement****************************" << std::endl;
 				// TODO: Add your code to calculate number of page faults using Random replacement algorithm
 				// TODO: print the statistics and run-time
+
+				assign5.Random(num_frames);
 				break;
 		case 3:
 

@@ -66,6 +66,8 @@ public:
 	void Test1(int numberFrames);
 	// Test2 FIFO Algorithm, large dataset
 	void FIFO(int numberFrames);
-
+	// Test2 Random Algorithm, large dataset
+	void Random(int numberFrames);
+	// Test2 LRU Algorithm, large dataset
 	void LRU(int numberFrames);
 };
