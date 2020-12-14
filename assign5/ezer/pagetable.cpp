@@ -458,6 +458,7 @@ void PageTable::LRU(int numberFrames)
     // read the text file
 	ifstream file("large_refs.txt");
 	string line;
+    ofstream MyFile("outputLRU.txt");
     while (file >> line)
     {
         int value = stoi(line);
